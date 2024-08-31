@@ -12,13 +12,18 @@ import "@fontsource/space-mono";
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
 import classNames from "classnames";
-import { getLangFromUrl, useTranslations } from "../i18n/utils";
+import {
+  getLangFromUrl,
+  useTranslatedPath,
+  useTranslations,
+} from "../i18n/utils";
 import MainNav from "../layouts/MainNav.astro";
 import kevGif from "./images/kev.gif";
 import mouseAndPointer from "./images/mouse-cursor-hand-pointer.svg";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 
 const experiences = (await getCollection("experiences"))
   .filter(({ slug }) => !slug.includes("/") === (lang === "en"))
@@ -79,7 +84,9 @@ const experiences = (await getCollection("experiences"))
         <span>{t("home.links.letsChat")}</span>
         <img src={mouseAndPointer.src} alt="Hand pointer" /></a
       >
-      <a href="/services" role="button" class="secondary">{t("home.links.learnMore")}</a>
+      <a href={translatePath("services")} role="button" class="secondary"
+        >{t("home.links.learnMore")}</a
+      >
     </div>
   </main>
 </Layout>
