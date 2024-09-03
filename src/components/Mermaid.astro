@@ -1,0 +1,22 @@
+<script>
+  import mermaid from "mermaid";
+  import { getThemePreference } from "../components/ThemeToggle/get-theme-preference";
+  const theme = getThemePreference() === "dark" ? "dark" : "forest";
+  mermaid.initialize({
+    startOnLoad: false,
+    theme,
+    gantt: {
+      titleTopMargin: 35,
+      topPadding: 75,
+      barHeight: 30,
+      leftPadding: 100,
+      rightPadding: 10,
+      topAxis: true,
+      gridLineStartPadding: 50,
+    },
+  });
+
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid, pre[data-language="mermaid"]'),
+  });
+</script>

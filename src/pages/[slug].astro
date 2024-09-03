@@ -1,5 +1,5 @@
 ---
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 import Layout from "../layouts/Layout.astro";
 import MainNav from "../layouts/MainNav.astro";
 import MainContent from "../layouts/MainContent.astro";
@@ -13,9 +13,24 @@ export async function getStaticPaths() {
     }));
 }
 
+type Props = CollectionEntry<"pages"> & {
+  data: {
+    title: string;
+    entry: CollectionEntry<"pages">;
+    toc?: boolean;
+    sidebar?: boolean;
+    width?: "veryNarrow" | "narrow" | "largeAdaptive" | "normal";
+  };
+};
+
 const page = Astro.props;
-const { title, toc = true, sidebar = true } = page.data;
-const width = toc || sidebar ? "largeAdaptive" : "narrow";
+let {
+  title,
+  toc = true,
+  sidebar = true,
+  width,
+} = page.data;
+width = width || (toc || sidebar ? "largeAdaptive" : "narrow");
 ---
 
 <Layout title={title} width={width}>
