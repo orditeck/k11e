@@ -1,5 +1,10 @@
+import { backend } from "./backend";
 import { routes } from "./routes";
-import { ui, defaultLang, type Language } from "./ui";
+import { ui } from "./ui";
+import { defaultLang, type Language } from "./const";
+
+type UiKeys = keyof (typeof ui)[typeof defaultLang];
+type BackendKeys = keyof (typeof backend)[typeof defaultLang];
 
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split("/");
@@ -8,8 +13,20 @@ export function getLangFromUrl(url: URL) {
 }
 
 export function useTranslations(lang: Language) {
-  return function t(key: keyof (typeof ui)[typeof defaultLang]) {
-    return ui[lang][key] || ui[defaultLang][key];
+  return function t(key: UiKeys | BackendKeys) {
+    if (key in ui[lang]) {
+      return ui[lang][key as UiKeys];
+    }
+    if (key in backend[lang]) {
+      return backend[lang][key as BackendKeys];
+    }
+    if (key in ui[defaultLang]) {
+      return ui[defaultLang][key as UiKeys];
+    }
+    if (key in backend[defaultLang]) {
+      return backend[defaultLang][key as BackendKeys];
+    }
+    return key; // Fallback to returning the key itself if not found
   };
 }
 
@@ -20,7 +37,9 @@ export function useTranslatedPath(lang: Language) {
       defaultLang !== l &&
       routes[l] !== undefined &&
       routes[l][pathName] !== undefined;
-    const translatedPath = hasTranslation ? "/" + routes[l]![pathName] : `/${path}`;
+    const translatedPath = hasTranslation
+      ? "/" + routes[l]![pathName]
+      : `/${path}`;
 
     return l === defaultLang ? translatedPath : `/${l}${translatedPath}`;
   };

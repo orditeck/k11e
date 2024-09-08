@@ -1,11 +1,13 @@
 # build output
 dist/
 prev_dist/
+.wrangler/
 
 # generated types
 .astro/
 
 # dependencies
+.yarn/
 node_modules/
 
 # logs
@@ -17,6 +19,7 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.dev.vars
 
 # macOS-specific files
 .DS_Store

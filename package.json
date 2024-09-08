@@ -2,17 +2,21 @@
   "name": "new-nevek.co",
   "type": "module",
   "version": "0.0.1",
+  "packageManager": "yarn@3.6.3",
   "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro check && astro build",
-    "preview": "astro preview",
+    "dev": "wrangler types && astro dev",
+    "start": "wrangler types && astro dev",
+    "check": "rimraf dist && astro check",
+    "build": "rimraf dist && wrangler types && astro check && astro build",
+    "preview": "yarn build && wrangler pages dev ./dist",
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.3.4",
-    "@astrojs/markdoc": "^0.8.2",
-    "@astrojs/react": "^3.0.9",
+    "@anthropic-ai/sdk": "^0.27.2",
+    "@astrojs/check": "0.9.3",
+    "@astrojs/cloudflare": "^11.0.4",
+    "@astrojs/markdoc": "0.11.4",
+    "@astrojs/react": "3.6.2",
     "@calcom/embed-react": "^1.4.0",
     "@fontsource/jersey-15": "^5.0.2",
     "@fontsource/kalam": "^5.0.8",
@@ -23,13 +27,18 @@
     "@picocss/pico": "^2.0.6",
     "@types/react": "^18.2.46",
     "@types/react-dom": "^18.2.18",
-    "astro": "^4.10.2",
+    "astro": "^4.15.4",
     "classnames": "^2.5.1",
     "mermaid": "^11.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0",
+    "react-dom": "^18.3.1",
     "react-text-transition": "^3.1.0",
     "sass": "^1.69.6",
-    "typescript": "^5.3.3"
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3"
+  },
+  "devDependencies": {
+    "rimraf": "^6.0.1",
+    "wrangler": "^3.75.0"
   }
 }

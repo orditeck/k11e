@@ -65,11 +65,10 @@ const otherLangUrl = lang === "en" ? "fr" : "/";
 
   nav {
     background: hsl(220 10% 95% / 1);
+    margin-bottom: 2rem;
     @at-root html[data-theme="dark"] &:not(.transparent) {
       background: hsl(220 24% 14% / 1);
     }
-
-    margin-bottom: 2rem;
 
     .home {
       @media (max-width: map.get($breakpoints, md, breakpoint)) {

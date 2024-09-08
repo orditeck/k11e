@@ -1,0 +1,7 @@
+---
+import { getLangFromUrl } from "../i18n/utils";
+import PersonalityAdvice from "./PersonalityAdvice/PersonalityAdvice.tsx";
+const lang = getLangFromUrl(Astro.url);
+---
+
+<PersonalityAdvice lang={lang} client:load />

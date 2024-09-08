@@ -1,9 +1,9 @@
 ---
-import { getEntryBySlug } from "astro:content";
+import { getEntry } from "astro:content";
 import OriginalComponent from "./[slug].astro";
 import Mermaid from "../components/Mermaid.astro";
 
-const page = await getEntryBySlug("pages", "about-me");
+const page = await getEntry("pages", "about-me");
 ---
 
 <OriginalComponent {...page} />
