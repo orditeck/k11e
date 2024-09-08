@@ -132,6 +132,8 @@ const { Content, headings } = await entry.render();
     }
 
     @media (max-width: map.get($breakpoints, lg, breakpoint)) {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
       &,
       &.toc,
       &.sidebar,
@@ -142,9 +144,6 @@ const { Content, headings } = await entry.render();
           "body"
           "sidebar";
       }
-
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr;
 
       .toc,
       .body {

@@ -1,10 +1,11 @@
-import { defineConfig, passthroughImageService } from "astro/config";
+import { defineConfig, passthroughImageService, envField } from "astro/config";
 import react from "@astrojs/react";
-
 import markdoc from "@astrojs/markdoc";
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
+  output: 'hybrid',
   trailingSlash: "never",
   integrations: [react(), markdoc({ allowHTML: true })],
   i18n: {
@@ -17,5 +18,13 @@ export default defineConfig({
   },
   image: {
     service: passthroughImageService(),
+  },
+  adapter: cloudflare(),
+  experimental: {
+    env: {
+      schema: {
+        ANTHROPIC_API_KEY: envField.string({ context: "server", access: "secret" }),
+      }
+    }
   },
 });

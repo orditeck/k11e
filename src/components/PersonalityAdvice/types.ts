@@ -1,0 +1,63 @@
+export const mbtiTypes = {
+  en: [
+    { code: "ISTJ", name: "Logistician" },
+    { code: "ISFJ", name: "Defender" },
+    { code: "INFJ", name: "Advocate" },
+    { code: "INTJ", name: "Architect" },
+    { code: "ISTP", name: "Virtuoso" },
+    { code: "ISFP", name: "Adventurer" },
+    { code: "INFP", name: "Mediator" },
+    { code: "INTP", name: "Logician" },
+    { code: "ESTP", name: "Entrepreneur" },
+    { code: "ESFP", name: "Entertainer" },
+    { code: "ENFP", name: "Campaigner" },
+    { code: "ENTP", name: "Debater" },
+    { code: "ESTJ", name: "Executive" },
+    { code: "ESFJ", name: "Consul" },
+    { code: "ENFJ", name: "Protagonist" },
+    { code: "ENTJ", name: "Commander" },
+  ],
+  fr: [
+    { code: "ISTJ", name: "Logisticien" },
+    { code: "ISFJ", name: "Défenseur" },
+    { code: "INFJ", name: "Avocat" },
+    { code: "INTJ", name: "Architecte" },
+    { code: "ISTP", name: "Virtuose" },
+    { code: "ISFP", name: "Aventurier" },
+    { code: "INFP", name: "Médiateur" },
+    { code: "INTP", name: "Logicien" },
+    { code: "ESTP", name: "Entrepreneur" },
+    { code: "ESFP", name: "Amuseur" },
+    { code: "ENFP", name: "Activiste" },
+    { code: "ENTP", name: "Innovateur" },
+    { code: "ESTJ", name: "Directeur" },
+    { code: "ESFJ", name: "Consul" },
+    { code: "ENFJ", name: "Protagoniste" },
+    { code: "ENTJ", name: "Commandant" },
+  ]
+};
+
+export const enneagramTypes = {
+  en: [
+    { type: 1, name: "The Reformer" },
+    { type: 2, name: "The Helper" },
+    { type: 3, name: "The Achiever" },
+    { type: 4, name: "The Individualist" },
+    { type: 5, name: "The Investigator" },
+    { type: 6, name: "The Loyalist" },
+    { type: 7, name: "The Enthusiast" },
+    { type: 8, name: "The Challenger" },
+    { type: 9, name: "The Peacemaker" },
+  ],
+  fr: [
+    { type: 1, name: "Le Perfectionniste" },
+    { type: 2, name: "L'Altruiste" },
+    { type: 3, name: "Le Battant" },
+    { type: 4, name: "L'Individualiste" },
+    { type: 5, name: "L'Observateur" },
+    { type: 6, name: "Le Loyal" },
+    { type: 7, name: "L'Enthousiaste" },
+    { type: 8, name: "Le Chef" },
+    { type: 9, name: "Le Médiateur" },
+  ]
+};
