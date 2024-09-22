@@ -38,6 +38,16 @@ body > main {
     }
   }
 
+  .mrbeast {
+    margin: -2rem 0;
+    font-size: 0.8rem;
+
+    blockquote {
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+  }
+
   .animatedText {
     font-size: 2rem;
     font-weight: 500;
