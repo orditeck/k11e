@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "packageManager": "yarn@3.6.3",
   "scripts": {
-    "dev": "wrangler types && astro dev",
-    "start": "wrangler types && astro dev",
+    "dev": "astro dev",
+    "start": "astro dev",
     "check": "rimraf dist && astro check",
-    "build": "rimraf dist && wrangler types && astro check && astro build",
+    "build": "rimraf dist && astro check && astro build",
     "preview": "yarn build && wrangler pages dev ./dist",
     "astro": "astro"
   },

@@ -9,17 +9,17 @@ export default function TextTransition({ lang }: { lang: "fr" | "en" }) {
 
   const qualifiers = {
     en: [
-      "a competent",
-      "an innovative",
-      "a reliable",
-      "a skillful",
-      "an efficient",
-      "an excellent",
-      "a great",
-      "a proficient",
-      "a talented",
-      "a knowledgeable",
-      "a skilled",
+      "competent",
+      "innovative",
+      "reliable",
+      "skillful",
+      "efficient",
+      "excellent",
+      "great",
+      "proficient",
+      "talented",
+      "knowledgeable",
+      "skilled",
     ],
     fr: [
       "compétent",
@@ -77,28 +77,20 @@ export default function TextTransition({ lang }: { lang: "fr" | "en" }) {
 
   const qualifier = qualifiers[lang][qualifierIndex % qualifiers[lang].length];
   const title = titles[lang][titleIndex % titles[lang].length];
+  const prefix = lang === "en" ? "your" : "";
   const word1 = lang === "en" ? qualifier : title;
   const word2 = lang === "en" ? title : qualifier;
 
   return (
     <section className={styles.textTransition}>
-      <div className={styles.mobileOnly}>
-        <TextTransitionLib springConfig={presets.slow}>
-          {word1}
-        </TextTransitionLib>{" "}
-        <TextTransitionLib springConfig={presets.stiff}>
-          {word2}
-        </TextTransitionLib>
-      </div>
-
-      <div className={styles.exceptMobile}>
-        <TextTransitionLib springConfig={presets.slow} inline>
-          {word1}
-        </TextTransitionLib>{" "}
-        <TextTransitionLib springConfig={presets.stiff} inline>
-          {word2}
-        </TextTransitionLib>
-      </div>
+      {prefix}{" "}
+      <TextTransitionLib springConfig={presets.slow} inline>
+        {word1}
+      </TextTransitionLib>{" "}
+      <br />
+      <TextTransitionLib springConfig={presets.stiff} inline>
+        {word2}
+      </TextTransitionLib>
     </section>
   );
 }

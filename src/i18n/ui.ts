@@ -11,14 +11,14 @@ export const ui = {
     "nav.about": "About",
 
     "home.documentTitle": "Welcome!",
+    "home.banner.meetKeven": "Meet Keven",
     "home.welcome.p1": "Bonjour, I'm Keven!",
     "home.welcome.p2":
       "With 15+ years in the tech industry, I excel in delivering outstanding results for high-stakes projects!",
-    "home.animatedText.p1": "I've heard that",
-    "home.animatedText.p2": "you're in need of",
     "home.mrbeast.quote": "“Consultants are literally cheat codes.”",
     "home.links.letsChat": "Let's chat",
-    "home.links.learnMore": "Learn more",
+    "home.links.services": "Services offered",
+    "home.links.aboutKeven": "Read more about Keven",
 
     "sidebar.scheduleVirtualCall.title": "Schedule a Virtual Call",
     "sidebar.scheduleVirtualCall.content":
@@ -56,14 +56,14 @@ export const ui = {
     "nav.about": "À propos",
 
     "home.documentTitle": "Bienvenue!",
+    "home.banner.meetKeven": "Rencontrez Keven",
     "home.welcome.p1": "Bonjour, je suis Keven!",
     "home.welcome.p2":
       "Avec plus de 15 ans d'expérience en développement logiciel, j'excelle à livrer des résultats exceptionnels pour des projets à hauts enjeux.",
-    "home.animatedText.p1": "J'ai entendu dire que",
-    "home.animatedText.p2": "vous avez besoin d'un",
     "home.mrbeast.quote": "« Les consultants sont littéralement des codes de triche »",
     "home.links.letsChat": "Discutons",
-    "home.links.learnMore": "Voir mes services",
+    "home.links.services": "Services offerts",
+    "home.links.aboutKeven": "Lire davantage sur Keven",
 
     "sidebar.scheduleVirtualCall.title": "Planifier un appel virtuel",
     "sidebar.scheduleVirtualCall.content":

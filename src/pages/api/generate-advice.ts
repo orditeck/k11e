@@ -3,7 +3,7 @@ import type { APIRoute } from "astro";
 import { ANTHROPIC_API_KEY } from "astro:env/server";
 import Anthropic from "@anthropic-ai/sdk";
 
-export const POST: APIRoute = async ({ request, locals, currentLocale }) => {
+export const POST: APIRoute = async ({ request, locals }) => {
   const { ctx } = locals.runtime;
   const data = await request.json();
   const mbti = data.mbti;

@@ -20,84 +20,134 @@ import {
 import MainNav from "../layouts/MainNav.astro";
 import kevGif from "./images/kev.gif";
 import mouseAndPointer from "./images/mouse-cursor-hand-pointer.svg";
+import kevbanner from "./images/kevbanner2.avif";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 const translatePath = useTranslatedPath(lang);
+const homeUrl = lang === "fr" ? `/${lang}` : "/";
 
 const experiences = (await getCollection("experiences"))
   .filter(({ slug }) => !slug.includes("/") === (lang === "en"))
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
+
+const servicesContent = (await getCollection("pages")).find(
+  ({ slug }) =>
+    (lang === "fr" && slug === "fr/services") ||
+    (lang === "en" && slug === "services")
+);
+const { Content } = await servicesContent!.render();
 ---
 
-<Layout title={t("home.documentTitle")} width="veryNarrow">
+<Layout title={t("home.documentTitle")} width="narrow">
   <MainNav transparent hideHome />
-  <main>
-    <section class="hi">
-      <img src={kevGif.src} alt="Keven" width={80} height={80} />
-      <p>
-        <em>{t("home.welcome.p1")}</em>
-        {t("home.welcome.p2")}
-      </p>
-    </section>
 
-    <section class="animatedText">
-      <div>
-        <span>{t("home.animatedText.p1")}</span>
-        <span>{t("home.animatedText.p2")}</span>
+  <main>
+    <header style=`background-image: url(${kevbanner.src});`>
+      <section class="container">
+        <div class="top">
+          {t("home.banner.meetKeven")},
+          <TextTransition client:only="react" lang={lang} />
+        </div>
+
+        <div class="links bottom">
+          <a href="mailto:kev@k11e.com" role="button" class="contrast">
+            <span>{t("home.links.letsChat")}</span>
+            <img src={mouseAndPointer.src} alt="Hand pointer" /></a
+          >
+          <a href={`${homeUrl}#services`} role="button" class="secondary"
+            >{t("home.links.services")} ↓</a
+          >
+        </div>
+      </section>
+    </header>
+
+    <section>
+      <div class="alternate">
+        <section class="hi">
+          <img src={kevGif.src} alt="Keven" width={80} height={80} />
+          <p>
+            <em>{t("home.welcome.p1")}</em>
+            {t("home.welcome.p2")}
+          </p>
+        </section>
+
+        <ul class="quicklook">
+          {
+            experiences.map((experience, i) => (
+              <li
+                class={classNames({
+                  strong: experience.data.strong,
+                  lessPaddingBottom: i === experiences.length - 1,
+                })}
+              >
+                <div>{experience.data.title}</div>
+                <div>
+                  {experience.data.icon && (
+                    <>
+                      @{" "}
+                      <Image
+                        src={experience.data.icon}
+                        alt={experience.data.title}
+                        width={16}
+                      />
+                    </>
+                  )}
+                  {experience.data.company}
+                </div>
+                <div>{experience.data.duration}</div>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="links">
+          <a href="mailto:kev@k11e.com" role="button" class="contrast">
+            <span>{t("home.links.letsChat")}</span>
+            <img src={mouseAndPointer.src} alt="Hand pointer" /></a
+          >
+          <a href={`${homeUrl}#services`} role="button" class="secondary"
+            >{t("home.links.services")} ↓</a
+          >
+        </div>
       </div>
 
-      <TextTransition client:only="react" lang={lang} />
-    </section>
+      <a id="services"></a>
+      <main class="container">
+        <header class="header">
+          <hgroup>
+            <h1>{servicesContent!.data.title}</h1>
+            <h2>{servicesContent!.data.subtitle}</h2>
+          </hgroup>
+        </header>
+        <div id="content" role="document" class="body">
+          <Content frontmatter={servicesContent!.data} />
+        </div>
+      </main>
 
-    <ul class="quicklook">
-      {
-        experiences.map((experience, i) => (
-          <li
-            class={classNames({
-              strong: experience.data.strong,
-              lessPaddingBottom: i === experiences.length - 1,
-            })}
-          >
-            <div>{experience.data.title}</div>
-            <div>
-              {experience.data.icon && (
-                <>
-                  @{" "}
-                  <Image
-                    src={experience.data.icon}
-                    alt={experience.data.title}
-                    width={16}
-                  />
-                </>
-              )}
-              {experience.data.company}
-            </div>
-            <div>{experience.data.duration}</div>
-          </li>
-        ))
-      }
-    </ul>
+      <div class="links">
+        <a href="mailto:kev@k11e.com" role="button" class="contrast">
+          <span>{t("home.links.letsChat")}</span>
+          <img src={mouseAndPointer.src} alt="Hand pointer" /></a
+        >
+        <a href={translatePath("about-me")} role="button" class="secondary"
+          >{t("home.links.aboutKeven")}</a
+        >
+      </div>
 
-    <div class="links">
-      <a href="mailto:kev@k11e.com" role="button" class="contrast">
-        <span>{t("home.links.letsChat")}</span>
-        <img src={mouseAndPointer.src} alt="Hand pointer" /></a
-      >
-      <a href={translatePath("services")} role="button" class="secondary"
-        >{t("home.links.learnMore")}</a
-      >
-    </div>
-
-    <section class="mrbeast">
-      <blockquote>
-        {t("home.mrbeast.quote")}
-        <footer>
-          <cite>
-            — MrBeast's <a href="https://drive.google.com/file/d/1YaG9xpu-WQKBPUi8yQ4HaDYQLUSa7Y3J/view" target="_blank">HOW TO SUCCEED</a>
-          </cite>
-        </footer>
-      </blockquote>
+      <section class="mrbeast">
+        <blockquote>
+          {t("home.mrbeast.quote")}
+          <footer>
+            <cite>
+              — MrBeast's <a
+                href="https://drive.google.com/file/d/1YaG9xpu-WQKBPUi8yQ4HaDYQLUSa7Y3J/view"
+                target="_blank">HOW TO SUCCEED</a
+              >
+            </cite>
+          </footer>
+        </blockquote>
+      </section>
     </section>
   </main>
 </Layout>

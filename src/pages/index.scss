@@ -1,83 +1,171 @@
 @use "sass:map";
 @use "@picocss/pico/scss/settings" as *;
+@import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap");
 
 body > main {
-  font-family: "Noto Sans", sans-serif;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 4rem;
-  gap: 5rem;
-  min-height: calc(100vh - 7rem);
+  padding: 0;
 
-  section {
-    margin-bottom: 0;
-  }
-
-  img {
-    vertical-align: middle;
-  }
-
-  .hi {
+  > header {
+    width: 100%;
     display: flex;
-    gap: 0.8rem;
-    max-width: 20.9rem;
-    align-items: center;
+    min-height: calc(100vh - 7rem);
+    position: relative;
+    color: white;
+    background-size: cover;
+    background-position: 25% 0%;
+    overflow-x: hidden;
 
-    p {
-      font-size: 0.85rem;
-      line-height: 1.4;
-      font-weight: 300;
-      margin: 0;
-    }
-
-    em {
-      display: block;
-      font-family: "Kalam", sans-serif;
-      font-style: normal;
-    }
-  }
-
-  .mrbeast {
-    margin: -2rem 0;
-    font-size: 0.8rem;
-
-    blockquote {
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-  }
-
-  .animatedText {
-    font-size: 2rem;
-    font-weight: 500;
-    text-align: center;
-    overflow: hidden;
-  }
-
-  ul.quicklook {
-    font-family: "Space Mono", monospace;
-    list-style: none;
-    font-size: 0.7rem;
-    margin: 0;
-    padding: 0;
-
-    li {
+    &:before {
+      content: "";
+      position: absolute;
       width: 100%;
-      display: grid;
-      grid-template-columns: 3.3fr 2.2fr 1fr;
-      margin: 0;
-      white-space: nowrap;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      background: linear-gradient(
+        90deg,
+        rgba(20, 23, 30, 0) 25%,
+        rgb(61 71 96 / 75%) 75%
+      );
 
-      &.strong {
-        font-weight: 700;
+      @at-root html[data-theme="dark"] & {
+        background: linear-gradient(
+          90deg,
+          rgba(20, 23, 30, 0) 25%,
+          rgba(28, 33, 43, 0.75) 75%
+        );
       }
     }
+
+    > section {
+      position: relative;
+      z-index: 1;
+      margin: 0 auto;
+      padding: 5rem 0;
+      text-align: right;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      .top {
+        font-size: 4vw;
+        line-height: 4vw;
+        font-family: "Funnel Display", sans-serif;
+        color: white;
+
+        section {
+          font-size: 3vw;
+          line-height: 3.5vw;
+        }
+      }
+
+      .bottom {
+        align-self: flex-end;
+        justify-content: flex-end;
+        flex-wrap: wrap;
+      }
+    }
+  }
+
+  > section {
+    font-family: "Noto Sans", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5rem;
+    padding: 0;
+
+    section {
+      margin-bottom: 0;
+    }
+
+    img {
+      vertical-align: middle;
+    }
+
+    .alternate {
+      width: 100%;
+      background: #d8dbe3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 5rem;
+      gap: 5rem;
+
+      @at-root html[data-theme="dark"] & {
+        background: #0d0f14;
+      }
+    }
+
+    .hi {
+      display: flex;
+      gap: 0.8rem;
+      max-width: 20.9rem;
+      align-items: center;
+
+      p {
+        font-size: 0.85rem;
+        line-height: 1.4;
+        font-weight: 300;
+        margin: 0;
+      }
+
+      em {
+        display: block;
+        font-family: "Kalam", sans-serif;
+        font-style: normal;
+      }
+    }
+
+    .mrbeast {
+      margin: -2rem 0;
+      font-size: 0.8rem;
+
+      blockquote {
+        padding-top: 0;
+        padding-bottom: 0;
+      }
+    }
+
+    .animatedText {
+      font-size: 2rem;
+      font-weight: 500;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    ul.quicklook {
+      font-family: "Space Mono", monospace;
+      list-style: none;
+      font-size: 0.7rem;
+      margin: 0;
+      padding: 0;
+
+      li {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 3.3fr 2.2fr 1fr;
+        margin: 0;
+        white-space: nowrap;
+
+        &.strong {
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  a[id] {
+    margin-top: -5rem;
   }
 
   .links {
     display: flex;
     gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
 
     a {
       display: flex;
@@ -96,39 +184,59 @@ body > main {
 
   /* Mobile */
   @media (max-width: map.get($breakpoints, md, breakpoint)) {
-    padding: 10%;
-    gap: 4rem;
+    > header {
+      min-height: calc(75vh - 7rem);
 
-    .hi {
-      max-width: 15rem;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
+      > section .top {
+        font-size: 7vw;
+        line-height: 7vw;
 
-      p {
-        line-height: 1.5;
-      }
-
-      em {
-        text-align: center;
+        section {
+          font-size: 5vw;
+          line-height: 5.5vw;
+        }
       }
     }
 
-    .animatedText span {
-      display: block;
-    }
+    > section {
+      gap: 4rem;
 
-    ul.quicklook {
-      li {
-        grid-template-columns: auto;
-        padding-bottom: 1rem;
+      .alternate {
+        padding: 3rem;
+        gap: 3rem;
+      }
 
-        &.lessPaddingBottom {
-          padding-bottom: 0.25rem;
+      .hi {
+        max-width: 15rem;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+
+        p {
+          line-height: 1.5;
         }
 
-        .padded {
-          padding-left: 0;
+        em {
+          text-align: center;
+        }
+      }
+
+      .animatedText span {
+        display: block;
+      }
+
+      ul.quicklook {
+        li {
+          grid-template-columns: auto;
+          padding-bottom: 1rem;
+
+          &.lessPaddingBottom {
+            padding-bottom: 0.25rem;
+          }
+
+          .padded {
+            padding-left: 0;
+          }
         }
       }
     }

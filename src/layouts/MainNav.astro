@@ -20,7 +20,7 @@ const homeUrl = lang === "fr" ? `/${lang}` : "/";
 const otherLangUrl = lang === "en" ? "fr" : "/";
 ---
 
-<nav class:list={[{ transparent: transparent }]}>
+<nav class:list={[{ transparent: transparent, isHome: hideHome }]}>
   <div class="container">
     <a href={homeUrl}>
       <span>k11e</span>
@@ -40,7 +40,7 @@ const otherLangUrl = lang === "en" ? "fr" : "/";
         )
       }
       <li>
-        <a href={translatePath("services")} class="contrast"
+        <a href={`${homeUrl}#services`} class="contrast"
           >{t("nav.services")}</a
         >
       </li>
@@ -68,6 +68,10 @@ const otherLangUrl = lang === "en" ? "fr" : "/";
     margin-bottom: 2rem;
     @at-root html[data-theme="dark"] &:not(.transparent) {
       background: hsl(220 24% 14% / 1);
+    }
+
+    &.isHome {
+      margin-bottom: 0;
     }
 
     .home {
