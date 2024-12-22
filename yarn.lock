@@ -5706,7 +5706,7 @@ __metadata:
     mermaid: ^11.1.0
     react: ^18.2.0
     react-dom: ^18.3.1
-    react-text-transition: "https://github.com/South-Paw/react-text-transition.git"
+    react-text-transition: "https://github.com/South-Paw/react-text-transition.git#2c4e7f33620af18d58d7d23ecba3afc5780144bf"
     rimraf: ^6.0.1
     sass: ^1.69.6
     typescript: ^5.5.4
@@ -6159,7 +6159,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-text-transition@https://github.com/South-Paw/react-text-transition.git":
+"react-text-transition@https://github.com/South-Paw/react-text-transition.git#2c4e7f33620af18d58d7d23ecba3afc5780144bf":
   version: 3.1.0
   resolution: "react-text-transition@https://github.com/South-Paw/react-text-transition.git#commit=2c4e7f33620af18d58d7d23ecba3afc5780144bf"
   dependencies:
