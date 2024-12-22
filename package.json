@@ -32,7 +32,7 @@
     "mermaid": "^11.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.3.1",
-    "react-text-transition": "https://github.com/South-Paw/react-text-transition.git#2c4e7f33620af18d58d7d23ecba3afc5780144bf",
+    "react-text-transition": "github:South-Paw/react-text-transition.git#2c4e7f33620af18d58d7d23ecba3afc5780144bf",
     "sass": "^1.69.6",
     "typescript": "^5.5.4",
     "vite": "^5.4.3"
