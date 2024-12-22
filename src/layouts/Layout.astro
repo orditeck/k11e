@@ -1,6 +1,7 @@
 ---
 import { getLangFromUrl, useTranslations } from "../i18n/utils";
 import "./Layout.scss";
+import kevbanner from "./images/kevbanner2.avif";
 
 interface Props {
   title: string;
@@ -21,6 +22,7 @@ const { title, width = "normal" } = Astro.props;
       content={t("site.meta.description")}
     />
     <meta name="viewport" content="width=device-width" />
+    <meta property="og:image" content={kevbanner.src} />
     <link rel="icon" type="image/icon" href="/favicon.ico" />
     <title>{title} | {t("site.html.title")}</title>
   </head>
