@@ -5706,7 +5706,7 @@ __metadata:
     mermaid: ^11.1.0
     react: ^18.2.0
     react-dom: ^18.3.1
-    react-text-transition: ^3.1.0
+    react-text-transition: "https://github.com/South-Paw/react-text-transition.git"
     rimraf: ^6.0.1
     sass: ^1.69.6
     typescript: ^5.5.4
@@ -6159,14 +6159,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-text-transition@npm:^3.1.0":
+"react-text-transition@https://github.com/South-Paw/react-text-transition.git":
   version: 3.1.0
-  resolution: "react-text-transition@npm:3.1.0"
+  resolution: "react-text-transition@https://github.com/South-Paw/react-text-transition.git#commit=2c4e7f33620af18d58d7d23ecba3afc5780144bf"
   dependencies:
     "@react-spring/web": ^9.7.2
+    use-debounce: ^9.0.4
   peerDependencies:
     react: ">=18.0.0"
-  checksum: 604d90f82697258eececa3aa2dd55efcd8ecdff3056bf3119663112b236dbebf455654e3a6c70938fbd56a8365a2d005bc54c6597179178d9710b40a876206bf
+  checksum: b54678251f3bc6f654e52eb7bc65d7b623f3cf103ce679bf030a764899b90db67a68ada67c77e8d33c9a027819f54e785e10be10b195be29c3f7087f084039bf
   languageName: node
   linkType: hard
 
@@ -7290,6 +7291,15 @@ __metadata:
   bin:
     update-browserslist-db: cli.js
   checksum: 7b74694d96f0c360f01b702e72353dc5a49df4fe6663d3ee4e5c628f061576cddf56af35a3a886238c01dd3d8f231b7a86a8ceaa31e7a9220ae31c1c1238e562
+  languageName: node
+  linkType: hard
+
+"use-debounce@npm:^9.0.4":
+  version: 9.0.4
+  resolution: "use-debounce@npm:9.0.4"
+  peerDependencies:
+    react: ">=16.8.0"
+  checksum: 37da4ecbe4e10a6230580cac03a8cae1788ea3e417dfdd92fcf654325458cf1b4567fd57bebf888edab62701a6abe47059a585008fd04228784f223f94d66ce4
   languageName: node
   linkType: hard
 

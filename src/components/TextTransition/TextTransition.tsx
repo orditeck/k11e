@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { default as TextTransitionLib, presets } from "react-text-transition";
+import { default as TextTransitionLib, presets } from "react-text-transition/src";
 
 import styles from "./TextTransition.module.scss";
 
