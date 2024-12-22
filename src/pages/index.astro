@@ -39,7 +39,11 @@ const servicesContent = (await getCollection("pages")).find(
 const { Content } = await servicesContent!.render();
 ---
 
-<Layout title={t("home.documentTitle")} width="narrow">
+<Layout
+  title={t("home.documentTitle")}
+  metaTitle={t("home.welcome.p1")}
+  width="narrow"
+>
   <MainNav transparent hideHome />
 
   <main class="home">
