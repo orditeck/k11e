@@ -5,20 +5,18 @@ import kevbanner from "../assets/kevbanner2.avif";
 
 interface Props {
   title: string;
-  metaTitle?: string;
   width?: "veryNarrow" | "narrow" | "largeAdaptive" | "normal";
 }
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const { title, metaTitle, width = "normal" } = Astro.props;
+const { title, width = "normal" } = Astro.props;
 ---
 
 <!doctype html>
 <html lang={lang}>
   <head>
     <meta charset="UTF-8" />
-    <meta name="title" content={metaTitle || title} />
     <meta
       name="description"
       content={t("site.meta.description")}
