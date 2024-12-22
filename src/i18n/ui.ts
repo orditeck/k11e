@@ -10,7 +10,7 @@ export const ui = {
     "nav.services": "Services",
     "nav.about": "About",
 
-    "home.documentTitle": "Welcome!",
+    "home.documentTitle": "Hi, I'm Keven!",
     "home.banner.meetKeven": "Meet Keven",
     "home.welcome.p1": "Bonjour, I'm Keven!",
     "home.welcome.p2":
@@ -55,7 +55,7 @@ export const ui = {
     "nav.services": "Services",
     "nav.about": "À propos",
 
-    "home.documentTitle": "Bienvenue!",
+    "home.documentTitle": "Bonjour, je suis Keven!",
     "home.banner.meetKeven": "Rencontrez Keven",
     "home.welcome.p1": "Bonjour, je suis Keven!",
     "home.welcome.p2":
