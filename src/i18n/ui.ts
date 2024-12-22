@@ -1,9 +1,9 @@
 export const ui = {
   en: {
     "site.html.title":
-      "Keven Lefebvre: Consultant / Solutions Architect / Strategist / Dev",
+      "Keven Lefebvre, Tech Consultant",
     "site.meta.description":
-      "Keven Lefebvre: Consultant / Solutions Architect / Strategist / Dev",
+      "With over 15 years of diverse tech experience, Keven brings innovative solutions, strategic thinking, and a contagious passion to every project.",
 
     "nav.title": "Solutions Architect",
     "nav.home": "Home",
@@ -46,9 +46,9 @@ export const ui = {
   },
   fr: {
     "site.html.title":
-      "Keven Lefebvre: Consultant / Architecte de solutions / Stratège Numérique / Développeur",
+      "Keven Lefebvre, Consultant en Technologie",
     "site.meta.description":
-      "Keven Lefebvre: Consultant / Architecte de solutions / Stratège Numérique / Développeur",
+      "Avec plus de 15 ans d'expérience diversifiée en technologie, Keven apporte des solutions innovantes, une pensée stratégique et une passion contagieuse à chaque projet.",
 
     "nav.title": "Architecte de solutions",
     "nav.home": "Accueil",
