@@ -35,6 +35,7 @@ export default function TextTransition({ lang }: { lang: "fr" | "en" }) {
 
   const titles = {
     en: [
+      "fractional CTO",
       "solution architect",
       "technical architect",
       "technology analyst",
@@ -43,6 +44,7 @@ export default function TextTransition({ lang }: { lang: "fr" | "en" }) {
       "senior developer",
     ],
     fr: [
+      "CTO fractionnaire",
       "architecte de solutions",
       "architecte technique",
       "analyste technologique",
