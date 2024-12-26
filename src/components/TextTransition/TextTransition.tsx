@@ -9,10 +9,10 @@ export default function TextTransition({ lang }: { lang: "fr" | "en" }) {
 
   const qualifiers = {
     en: [
-      "competent",
       "innovative",
       "reliable",
       "skillful",
+      "competent",
       "efficient",
       "excellent",
       "great",
@@ -22,11 +22,11 @@ export default function TextTransition({ lang }: { lang: "fr" | "en" }) {
       "skilled",
     ],
     fr: [
-      "compétent",
       "innovant",
       "fiable",
-      "habile",
       "talentueux",
+      "habile",
+      "compétent",
       "informé",
       "adroit",
       "efficace",
