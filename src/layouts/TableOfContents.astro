@@ -30,45 +30,30 @@ function buildToc(headings: MarkdownHeading[]) {
 const toc = buildToc(headings);
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
+
+if (toc.length === 0) {
+  return null;
+}
 ---
 
-<article>
-  <header>
-    <strong>{t("toc.onThisPage")}</strong>
+<div class:list={["hidden", "md:block"]}>
+  <header
+    class:list={[
+      "font-bold",
+      "text-gray-900",
+      "dark:text-white",
+      "mb-2",
+      "underline",
+      "decoration-slate-200",
+      "underline-offset-4",
+      "dark:decoration-slate-700",
+    ]}
+  >
+    {t("toc.onThisPage")}
   </header>
-  <nav class="toc">
-    <ul>
+  <nav class="">
+    <ul class="ml-4">
       {toc.map((heading) => <TableOfContentsHeading heading={heading} />)}
     </ul>
   </nav>
-</article>
-
-<style is:inline lang="scss">
-  nav.toc {
-    a {
-      text-decoration: none;
-      color: var(--pico-secondary-hover);
-
-      &:hover {
-        color: var(--pico-secondary);
-      }
-    }
-
-    ul,
-    li {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 0.5rem;
-    }
-
-    ul ul {
-      padding-left: 1rem;
-    }
-
-    li a {
-      padding-left: 0.5rem;
-    }
-  }
-</style>
+</div>

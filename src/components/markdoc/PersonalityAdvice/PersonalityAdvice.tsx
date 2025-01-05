@@ -1,8 +1,8 @@
-// src/components/PersonalityAdvice.tsx
 import React, { useState, useEffect, useRef } from "react";
 import Markdoc from "@markdoc/markdoc";
-import { useTranslations } from "../../i18n/utils";
+import { useTranslations } from "../../../i18n/utils";
 import { enneagramTypes, mbtiTypes } from "./types";
+import classNames from "classnames";
 
 interface FormData {
   mbti: string;
@@ -68,13 +68,54 @@ export default function PersonalityAdvice({ lang }: { lang: "fr" | "en" }) {
   };
 
   return (
-    <article id="personality-advice">
+    <div
+      id="personality-advice"
+      className={classNames(
+        "bg-slate-100",
+        "p-10",
+        "rounded-xl",
+        "dark:bg-gray-800",
+      )}
+    >
       <h2>{t("personalityAdvice.heading")}</h2>
-      <p className="intro-text">{t("personalityAdvice.content")}</p>
+      <p>{t("personalityAdvice.content")}</p>
       <form onSubmit={handleSubmit}>
-        <label htmlFor="mbti">
+        <label
+          htmlFor="mbti"
+          className={classNames(
+            "mb-4",
+            "block",
+            "text-sm",
+            "font-medium",
+            "text-gray-900",
+            "dark:text-white",
+          )}
+        >
           {t("personalityAdvice.mbti")}
-          <select id="mbti" name="mbti" required>
+          <select
+            id="mbti"
+            name="mbti"
+            required
+            className={classNames(
+              "block",
+              "w-full",
+              "rounded-lg",
+              "border",
+              "border-gray-300",
+              "bg-gray-50",
+              "p-2.5",
+              "text-sm",
+              "text-gray-900",
+              "focus:border-blue-500",
+              "focus:ring-blue-500",
+              "dark:border-gray-600",
+              "dark:bg-gray-700",
+              "dark:text-white",
+              "dark:placeholder-gray-400",
+              "dark:focus:border-blue-500",
+              "dark:focus:ring-blue-500",
+            )}
+          >
             <option value="">{t("personalityAdvice.selectType")}</option>
             {mbtiTypes[lang].map((type) => (
               <option key={type.code} value={type.code}>
@@ -82,7 +123,7 @@ export default function PersonalityAdvice({ lang }: { lang: "fr" | "en" }) {
               </option>
             ))}
           </select>
-          <small style={{ display: "block" }}>
+          <small className={classNames("block", "font-normal")}>
             {t("personalityAdvice.dontKnowType")}{" "}
             <a
               href={t("personalityAdvice.mtbiTestLink")}
@@ -94,9 +135,42 @@ export default function PersonalityAdvice({ lang }: { lang: "fr" | "en" }) {
           </small>
         </label>
 
-        <label htmlFor="enneagram">
+        <label
+          htmlFor="enneagram"
+          className={classNames(
+            "mb-4",
+            "block",
+            "text-sm",
+            "font-medium",
+            "text-gray-900",
+            "dark:text-white",
+          )}
+        >
           {t("personalityAdvice.enneagram")}
-          <select id="enneagram" name="enneagram" required>
+          <select
+            id="enneagram"
+            name="enneagram"
+            required
+            className={classNames(
+              "block",
+              "w-full",
+              "rounded-lg",
+              "border",
+              "border-gray-300",
+              "bg-gray-50",
+              "p-2.5",
+              "text-sm",
+              "text-gray-900",
+              "focus:border-blue-500",
+              "focus:ring-blue-500",
+              "dark:border-gray-600",
+              "dark:bg-gray-700",
+              "dark:text-white",
+              "dark:placeholder-gray-400",
+              "dark:focus:border-blue-500",
+              "dark:focus:ring-blue-500",
+            )}
+          >
             <option value="">{t("personalityAdvice.selectType")}</option>
             {enneagramTypes[lang].map((type) => (
               <option key={type.type} value={type.type}>
@@ -116,7 +190,28 @@ export default function PersonalityAdvice({ lang }: { lang: "fr" | "en" }) {
           </small>
         </label>
 
-        <button type="submit" disabled={isLoading}>
+        <button
+          type="submit"
+          disabled={isLoading}
+          className={classNames(
+            "mb-2",
+            "me-2",
+            "rounded-lg",
+            "bg-blue-700",
+            "px-5",
+            "py-2.5",
+            "text-sm",
+            "font-medium",
+            "text-white",
+            "hover:bg-blue-800",
+            "focus:outline-none",
+            "focus:ring-4",
+            "focus:ring-blue-300",
+            "dark:bg-blue-600",
+            "dark:hover:bg-blue-700",
+            "dark:focus:ring-blue-800",
+          )}
+        >
           {isLoading
             ? t("personalityAdvice.generating")
             : t("personalityAdvice.getAdvice")}
@@ -125,6 +220,6 @@ export default function PersonalityAdvice({ lang }: { lang: "fr" | "en" }) {
       <div id="advice-result" aria-live="polite">
         {advice && renderMarkdown(advice)}
       </div>
-    </article>
+    </div>
   );
 }

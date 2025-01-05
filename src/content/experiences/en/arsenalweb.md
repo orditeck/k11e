@@ -1,6 +1,6 @@
 ---
 sortOrder: 4
-title: Directeur de l'ingénierie
+title: Director of Engineering
 company: Arsenal Web
 duration: 2018 - 2020
 icon: "../../../assets/experiences/arsenalweb.png"

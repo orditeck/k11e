@@ -23,10 +23,10 @@ export default function CalEmbed() {
         cssVarsPerTheme: {
           light: {},
           dark: {
-            "cal-bg-muted": "#1a1f28",
-            "cal-bg-emphasis": "#13171f",
-            "cal-bg": "#181c25",
-            "cal-bg-subtle": "#13171f",
+            "cal-bg-muted": "transparent",
+            "cal-bg-emphasis": "#030712",
+            "cal-bg": "#1f2937",
+            "cal-bg-subtle": "#030712",
             "cal-border": "#2a3140",
             "cal-border-subtle": "#202632",
             "cal-border-emphasis": "#434a56",

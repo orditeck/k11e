@@ -12,6 +12,19 @@ const experiences = defineCollection({
     }),
 });
 
+const services = defineCollection({
+  schema: ({ image }) =>
+    z.object({
+      marketingTitle: z.string(),
+      marketingBody: z.string(),
+      marketingImage: image(),
+      title: z.string(),
+      subtitle: z.string(),
+      toc: z.boolean().default(true),
+    }),
+});
+
 export const collections = {
   experiences,
+  services,
 };

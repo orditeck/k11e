@@ -1,0 +1,81 @@
+---
+interface Props {
+  id: string;
+  level: 1 | 2 | 3 | 4 | 5 | 6;
+  title?: string;
+  underline?: string;
+  subtitle?: string;
+  classes?: string[];
+}
+
+const { id, level, title, underline, subtitle, classes = [] } = Astro.props;
+const HeadingTag: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" = `h${level}`;
+---
+
+<HeadingTag
+  id={id}
+  class:list={[
+    "font-semibold",
+    "leading-none",
+    "tracking-tight",
+    "text-gray-900",
+    "dark:text-white",
+    {
+      "text-3xl": level === 1,
+      "text-2xl": level === 2,
+      "text-xl": level === 3,
+      "text-lg": level === 4,
+      "text-base": level === 5 || level === 6,
+      "md:text-4xl": level === 1,
+      "md:text-3xl": level === 2,
+      "md:text-2xl": level === 3,
+      "md:text-xl": level === 4,
+      "md:text-lg": level === 5 || level === 6,
+      "mt-12": level === 1,
+      "mt-11": level === 2,
+      "mt-10": level === 3,
+      "mt-9": level === 4,
+      "mt-0": level === 5 || level === 6,
+      "mb-4": level === 1,
+      "mb-3": level === 2,
+      "mb-2": level === 3,
+      "mb-1": level === 4,
+      "mb-0": level === 5 || level === 6,
+      "!mb-0 !mt-0": !!subtitle,
+    },
+    ...classes,
+  ]}
+>
+  {title ? title : <slot />}
+  {
+    underline && (
+      <>
+        {" "}
+        <span
+          class:list={[
+            "underline",
+            "decoration-blue-400",
+            "underline-offset-4",
+            "dark:decoration-blue-600",
+          ]}
+        >
+          {underline}
+        </span>
+      </>
+    )
+  }
+</HeadingTag>
+{
+  subtitle && (
+    <p
+      class:list={[
+        "text-lg",
+        "font-normal",
+        "text-gray-500",
+        "dark:text-gray-400",
+      ]}
+    >
+      {subtitle}
+    </p>
+  )
+}

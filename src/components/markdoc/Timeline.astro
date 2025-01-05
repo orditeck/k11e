@@ -1,0 +1,47 @@
+<div class="relative overflow-y-hidden overflow-x-scroll" id="timeline">
+  <div class="static w-[150%] min-w-[800px]">
+    <slot />
+  </div>
+</div>
+
+<style is:inline>
+  [data-theme="light"] {
+    --stroke: #dfe0f6;
+  }
+
+  [data-theme="dark"] {
+    --stroke: #2e3441;
+  }
+
+  .grid .tick line {
+    stroke: var(--stroke);
+  }
+</style>
+
+<script type="module" is:inline>
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: getThemePreference() === "dark" ? "dark" : "blue",
+    gantt: {
+      titleTopMargin: 35,
+      topPadding: 75,
+      barHeight: 30,
+      leftPadding: 100,
+      rightPadding: 10,
+      topAxis: true,
+      gridLineStartPadding: 50,
+    },
+  });
+
+  await mermaid.run({
+    nodes: document.querySelectorAll('.mermaid, pre[data-language="mermaid"]'),
+  });
+
+  const timelineElement = document.getElementById("timeline");
+  if (timelineElement) {
+    timelineElement.scrollLeft =
+      (timelineElement.scrollWidth - timelineElement.clientWidth) / 2;
+  }
+</script>

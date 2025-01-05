@@ -1,7 +1,6 @@
 ---
 import TextTransition from "../components/TextTransition/TextTransition";
 import Layout from "../layouts/Layout.astro";
-import "./index.scss";
 
 import "@fontsource/kalam";
 import "@fontsource/noto-sans/300.css";
@@ -11,143 +10,353 @@ import "@fontsource/space-mono";
 
 import { Image } from "astro:assets";
 import { getCollection } from "astro:content";
-import classNames from "classnames";
-import {
-  getLangFromUrl,
-  useTranslatedPath,
-  useTranslations,
-} from "../i18n/utils";
+import { getLangFromUrl, useTranslations } from "../i18n/utils";
 import MainNav from "../layouts/MainNav.astro";
 import kevGif from "./images/kev.gif";
 import mouseAndPointer from "./images/mouse-cursor-hand-pointer.svg";
 import kevbanner from "../assets/kevbanner2.avif";
+import servicesBg from "../assets/services_bg.avif";
+import Service from "../components/Service.astro";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
-const translatePath = useTranslatedPath(lang);
 const homeUrl = lang === "fr" ? `/${lang}` : "/";
 
 const experiences = (await getCollection("experiences"))
-  .filter(({ slug }) => !slug.includes("/") === (lang === "en"))
+  .filter(({ slug }) => slug.startsWith(`${lang}/`))
   .sort((a, b) => a.data.sortOrder - b.data.sortOrder);
 
-const servicesContent = (await getCollection("pages")).find(
-  ({ slug }) =>
-    (lang === "fr" && slug === "fr/services") ||
-    (lang === "en" && slug === "services")
-);
-const { Content } = await servicesContent!.render();
+const services = (await getCollection("services"))
+  .filter(({ slug }) => slug.startsWith(`${lang}/`))
+  .map((service) => ({
+    ...service,
+    slug: (() => {
+      const [_, ...slug] = service.slug.split("/");
+      return (lang !== "en" ? `/${lang}/` : "") + "services/" + slug.join("/");
+    })(),
+  }));
 ---
 
-<Layout title={t("home.documentTitle")} width="narrow">
-  <MainNav transparent hideHome />
+<Layout title={t("home.documentTitle")}>
+  <MainNav />
 
   <main class="home">
-    <header style=`background-image: url(${kevbanner.src});`>
-      <section class="container">
-        <div class="top">
+    <header
+      style=`--image-url: url('${kevbanner.src}')`
+      class:list={[
+        "flex",
+        "min-h-[calc(100vh_-_7rem)]",
+        "bg-[linear-gradient(_to_right,rgba(20,23,30,0)_25%,rgba(61,71,96,0.75)_75%),var(--image-url)]",
+        "dark:bg-[linear-gradient(_to_right,rgba(20,23,30,0)_25%,rgba(28,33,43,0.75)_75%),var(--image-url)]",
+        "bg-cover",
+        "bg-[25%_0]",
+        "overflow-x-hidden",
+      ]}
+    >
+      <section
+        class:list={[
+          "flex",
+          "flex-col",
+          "justify-between",
+          "py-24",
+          "lg:px-5",
+          "px-10",
+          "text-right",
+          "max-w-screen-lg",
+          "mx-auto",
+          "container",
+        ]}
+      >
+        <div
+          class:list={[
+            "text-2xl",
+            "text-white",
+            "font-['Funnel_Display']",
+            "md:text-4xl",
+            "lg:text-6xl",
+            "!leading-[1]",
+          ]}
+        >
           {t("home.banner.meetKeven")},
-          <TextTransition client:only="react" lang={lang} />
+          <div
+            class:list={[
+              "text-xl",
+              "md:text-3xl",
+              "lg:text-5xl",
+              "!leading-[1.1]",
+            ]}
+          >
+            <TextTransition client:only="react" lang={lang} />
+          </div>
         </div>
 
-        <div class="links bottom">
-          <a href="mailto:kev@k11e.com" role="button" class="contrast">
-            <span>{t("home.links.letsChat")}</span>
-            <img src={mouseAndPointer.src} alt="Hand pointer" /></a
+        <div class="flex flex-wrap justify-end gap-4 self-end">
+          <a
+            href={`${homeUrl}#services`}
+            role="button"
+            class:list={[
+              "relative",
+              "inline-flex",
+              "items-center",
+              "justify-center",
+              "p-0.5",
+              "mb-2",
+              "me-2",
+              "overflow-hidden",
+              "text-lg",
+              "font-medium",
+              "text-gray-900",
+              "rounded-lg",
+              "group",
+              "bg-gradient-to-br",
+              "from-purple-500",
+              "to-pink-500",
+              "group-hover:from-purple-500",
+              "group-hover:to-pink-500",
+              "hover:text-white",
+              "dark:text-white",
+            ]}
           >
-          <a href={`${homeUrl}#services`} role="button" class="secondary"
-            >{t("home.links.services")} ↓</a
+            <span
+              class:list={[
+                "relative",
+                "px-5",
+                "py-2.5",
+                "transition-all",
+                "ease-in",
+                "duration-75",
+                "bg-white",
+                "dark:bg-gray-900",
+                "rounded-md",
+                "group-hover:bg-opacity-0",
+              ]}
+            >
+              {t("home.links.services")} ↓
+            </span>
+          </a>
+          <a
+            href="mailto:kev@k11e.com"
+            role="button"
+            class:list={[
+              "relative",
+              "inline-flex",
+              "items-center",
+              "justify-center",
+              "p-0.5",
+              "mb-2",
+              "me-2",
+              "overflow-hidden",
+              "text-lg",
+              "font-medium",
+              "text-gray-900",
+              "rounded-lg",
+              "group",
+              "bg-gradient-to-br",
+              "from-purple-600",
+              "to-blue-500",
+              "group-hover:from-purple-600",
+              "group-hover:to-blue-500",
+              "hover:text-white",
+              "dark:text-white",
+            ]}
           >
+            <span
+              class:list={[
+                "flex",
+                "relative",
+                "px-5",
+                "py-2.5",
+                "transition-all",
+                "ease-in",
+                "duration-75",
+                "bg-white",
+                "dark:bg-gray-900",
+                "rounded-md",
+                "group-hover:bg-opacity-0",
+              ]}
+            >
+              <span class="self-center">{t("home.links.letsChat")}</span>
+              <img
+                class="ml-2 w-6"
+                src={mouseAndPointer.src}
+                alt="Hand pointer"
+              />
+            </span>
+          </a>
         </div>
       </section>
     </header>
 
-    <section>
-      <div class="alternate">
-        <section class="hi">
-          <img src={kevGif.src} alt="Keven" width={80} height={80} />
-          <p>
-            <em>{t("home.welcome.p1")}</em>
-            {t("home.welcome.p2")}
+    <a id="services"></a>
+    <section
+      style={`--services-bg: url('${servicesBg.src}')`}
+      class:list={[
+        "bg-blend-screen",
+        "bg-contain",
+        "bg-[linear-gradient(_to_right,#f4f5f9,#f4f5f9),var(--services-bg)]",
+        "dark:bg-transparent",
+        "dark:[background:linear-gradient(to_bottom,#333333,transparent_6%),linear-gradient(to_right,#130312,#011116),linear-gradient(to_bottom,#c9c9c9,#4a4a4a_30%),_var(--services-bg)_top_left/70%_fixed]",
+        "dark:bg-blend-hard-light",
+        "dark:text-white",
+        "dark:border-t-4",
+        "dark:border-slate-700",
+        "py-px",
+      ]}
+    >
+      <div class:list={["mx-auto", "max-w-screen-xl", "px-5"]}>
+        <div
+          class:list={[
+            "mx-auto",
+            "pt-24",
+            "flex",
+            "max-w-2xl",
+            "flex-col",
+            "items-center",
+            "justify-center",
+            "box-content",
+          ]}
+        >
+          <h2
+            class:list={[
+              "text-center",
+              "text-4xl",
+              "font-bold",
+              "mb-6",
+              "lg:text-5xl",
+              "lg:tracking-tight",
+            ]}
+          >
+            {t("home.services.title")}
+          </h2>
+          <h3
+            class:list={[
+              "text-center",
+              "text-2xl",
+              "font-bold",
+              "text-slate-600",
+              "lg:text-3xl",
+              "lg:tracking-tight",
+              "dark:text-slate-400",
+            ]}
+          >
+            {t("home.services.subtitle")}
+          </h3>
+          <p
+            class:list={[
+              "mt-4",
+              "text-center",
+              "text-lg",
+              "text-slate-600",
+              "[text-wrap:pretty]",
+              "dark:text-slate-300",
+            ]}
+          >
+            {t("home.services.content")}
           </p>
-        </section>
-
-        <ul class="quicklook">
+        </div>
+        <div class="-mt-10">
           {
-            experiences.map((experience, i) => (
-              <li
-                class={classNames({
-                  strong: experience.data.strong,
-                  lessPaddingBottom: i === experiences.length - 1,
-                })}
-              >
-                <div>{experience.data.title}</div>
-                <div>
-                  {experience.data.icon && (
-                    <>
-                      @{" "}
-                      <Image
-                        src={experience.data.icon}
-                        alt={experience.data.title}
-                        width={16}
-                      />
-                    </>
-                  )}
-                  {experience.data.company}
-                </div>
-                <div>{experience.data.duration}</div>
-              </li>
+            services.map((service, i) => (
+              <Service
+                slug={service.slug}
+                title={service.data.marketingTitle}
+                body={service.data.marketingBody}
+                image={service.data.marketingImage}
+                position={i % 2 === 0 ? "left" : "right"}
+              />
             ))
           }
-        </ul>
-
-        <div class="links">
-          <a href="mailto:kev@k11e.com" role="button" class="contrast">
-            <span>{t("home.links.letsChat")}</span>
-            <img src={mouseAndPointer.src} alt="Hand pointer" /></a
-          >
-          <a href={`${homeUrl}#services`} role="button" class="secondary"
-            >{t("home.links.services")} ↓</a
-          >
         </div>
       </div>
+    </section>
 
-      <a id="services"></a>
-      <main class="container">
-        <header class="header">
-          <hgroup>
-            <h1>{servicesContent!.data.title}</h1>
-            <h2>{servicesContent!.data.subtitle}</h2>
-          </hgroup>
-        </header>
-        <div id="content" role="document" class="body">
-          <Content frontmatter={servicesContent!.data} />
-        </div>
-      </main>
-
-      <div class="links">
-        <a href="mailto:kev@k11e.com" role="button" class="contrast">
-          <span>{t("home.links.letsChat")}</span>
-          <img src={mouseAndPointer.src} alt="Hand pointer" /></a
-        >
-        <a href={translatePath("about-me")} role="button" class="secondary"
-          >{t("home.links.aboutKeven")}</a
-        >
+    <section
+      class:list={[
+        "flex",
+        "flex-col",
+        "items-center",
+        "gap-20",
+        "py-28",
+        "px-10",
+        "font-['Noto_Sans']",
+        "bg-[#d8dbe3]",
+        "dark:border-slate-700",
+        "dark:bg-gradient-to-b",
+        "dark:from-slate-800",
+        "dark:to-slate-900",
+        "dark:border-t-4",
+        "dark:text-white",
+        "lg:py-28",
+      ]}
+    >
+      <div
+        class:list={[
+          "flex",
+          "md:max-w-xl",
+          "items-center",
+          "gap-[0.8rem]",
+          "max-w-full",
+        ]}
+      >
+        <img src={kevGif.src} alt="Keven" width={90} height={90} />
+        <p>
+          <em class:list={["block", "font-['Kalam']", "not-italic", "text-lg"]}>
+            {t("home.welcome.p1")}
+          </em>
+          <span class:list={["block", "font-light", "text-md", "text-pretty"]}>
+            {t("home.welcome.p2")}
+          </span>
+        </p>
       </div>
 
-      <section class="mrbeast">
-        <blockquote>
-          {t("home.mrbeast.quote")}
-          <footer>
-            <cite>
-              — MrBeast's <a
-                href="https://drive.google.com/file/d/1YaG9xpu-WQKBPUi8yQ4HaDYQLUSa7Y3J/view"
-                target="_blank">HOW TO SUCCEED</a
-              >
-            </cite>
-          </footer>
-        </blockquote>
-      </section>
+      <ul class:list={["font-['Space_Mono']", "text-sm"]}>
+        {
+          experiences.map((experience, i) => (
+            <li
+              class:list={[
+                "m-0",
+                "grid",
+                "w-full",
+                "pb-5",
+                "whitespace-nowrap",
+                "grid-cols-1",
+                "md:grid-cols-[3.3fr_2.2fr_1fr]",
+                "md:pb-0",
+                "tracking-tighter",
+                {
+                  "font-bold": experience.data.strong,
+                  "pb-0": i === experiences.length - 1,
+                },
+              ]}
+            >
+              <div class="[grid-row:1/2] md:[grid-row:none]">
+                {experience.data.title}
+              </div>
+              <div class="[grid-row:2/2] md:[grid-row:none]">
+                {experience.data.icon && (
+                  <>
+                    @{" "}
+                    <Image
+                      src={experience.data.icon}
+                      alt={experience.data.title}
+                      width={16}
+                      class:list={["inline-block"]}
+                    />
+                  </>
+                )}
+                {experience.data.company}
+              </div>
+              <div class="[grid-row:2/2] md:[grid-row:none]">
+                {experience.data.duration}
+              </div>
+            </li>
+          ))
+        }
+      </ul>
     </section>
   </main>
 </Layout>
+
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Funnel+Display:wght@300..800&display=swap");
+</style>
