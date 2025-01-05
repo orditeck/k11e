@@ -1,5 +1,9 @@
 export const ui = {
   en: {
+    "global.learnMore": "Learn more",
+    "global.contact": "Contact",
+    "global.contactMe": "Contact me",
+
     "site.html.title":
       "Keven Lefebvre, Tech Consultant",
     "site.meta.description":
@@ -9,23 +13,28 @@ export const ui = {
     "nav.home": "Home",
     "nav.services": "Services",
     "nav.about": "About",
+    "nav.contact": "Contact",
+    "nav.resources": "Resources",
+
+    "footer.allRightsReserved": "All rights reserved.",
 
     "home.documentTitle": "Hi, I'm Keven!",
     "home.banner.meetKeven": "Meet Keven",
     "home.welcome.p1": "Bonjour, I'm Keven!",
     "home.welcome.p2":
       "With 15+ years in the tech industry, I excel in delivering outstanding results for high-stakes projects!",
-    "home.mrbeast.quote": "“Consultants are literally cheat codes.”",
     "home.links.letsChat": "Let's chat",
     "home.links.services": "Services offered",
-    "home.links.aboutKeven": "Read more about Keven",
+    "home.services.title": "Services",
+    "home.services.subtitle": "Discover how I can help you succeed",
+    "home.services.content": "Whether you're an entrepreneur, software developer, or forward-thinking company, I'm here to help you achieve your goals and exceed your expectations.",
 
     "sidebar.scheduleVirtualCall.title": "Schedule a Virtual Call",
     "sidebar.scheduleVirtualCall.content":
       "Book a 15-minute call to discuss how I can help you succeed.",
     "sidebar.contact.or": "or, you can also:",
-    "sidebar.contact.ctaEmail": "Contact me by email",
-    "sidebar.contact.ctaCall": "Give me a call:",
+    "sidebar.contact.ctaEmail": "Email me",
+    "sidebar.contact.ctaCall": "Call me at",
 
     "toc.onThisPage": "On this page",
 
@@ -45,6 +54,10 @@ export const ui = {
     "personalityAdvice.generating": "Generating...",
   },
   fr: {
+    "global.learnMore": "En savoir plus",
+    "global.contact": "Contact",
+    "global.contactMe": "Me contacter",
+
     "site.html.title":
       "Keven Lefebvre, Consultant en Technologie",
     "site.meta.description":
@@ -54,23 +67,28 @@ export const ui = {
     "nav.home": "Accueil",
     "nav.services": "Services",
     "nav.about": "À propos",
+    "nav.contact": "Contact",
+    "nav.resources": "Ressources",
+
+    "footer.allRightsReserved": "Tous droits réservés.",
 
     "home.documentTitle": "Bonjour, je suis Keven!",
     "home.banner.meetKeven": "Rencontrez Keven",
     "home.welcome.p1": "Bonjour, je suis Keven!",
     "home.welcome.p2":
       "Avec plus de 15 ans d'expérience en développement logiciel, j'excelle à livrer des résultats exceptionnels pour des projets à hauts enjeux.",
-    "home.mrbeast.quote": "« Les consultants sont littéralement des codes de triche »",
     "home.links.letsChat": "Discutons",
     "home.links.services": "Services offerts",
-    "home.links.aboutKeven": "Lire davantage sur Keven",
+    "home.services.title": "Services",
+    "home.services.subtitle": "Découvrez comment je peux vous aider à réussir",
+    "home.services.content": "Que vous soyez un entrepreneur, un développeur de logiciels ou une entreprise visionnaire, je suis là pour vous aider à atteindre vos objectifs et à dépasser vos attentes.",
 
     "sidebar.scheduleVirtualCall.title": "Planifier un appel virtuel",
     "sidebar.scheduleVirtualCall.content":
       "Prenez rendez-vous pour un appel de 15 minutes afin de discuter de quelle manière je peux contribuer à votre succès.",
-    "sidebar.contact.or": "ou, vous pouvez également :",
-    "sidebar.contact.ctaEmail": "Communiquer avec moi par courriel",
-    "sidebar.contact.ctaCall": "Par téléphone :",
+    "sidebar.contact.or": "ou, vous pouvez :",
+    "sidebar.contact.ctaEmail": "M'écrire un courriel",
+    "sidebar.contact.ctaCall": "M'appeler au",
 
     "toc.onThisPage": "Sur cette page",
 

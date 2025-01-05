@@ -20,135 +20,208 @@ const t = useTranslations(lang);
 const { Content, headings } = await entry.render();
 ---
 
-<main
-  class:list={[
-    "container",
-    {
-      toc,
-      sidebar,
-    },
-  ]}
->
-  <header class="header">
-    <hgroup>
-      <h1>{entry.data.title}</h1>
-      <h2>{entry.data.subtitle}</h2>
+<main class="mb-10">
+  <header
+    class:list={[
+      "header",
+      "not-format",
+      "bg-gradient-to-b",
+      "px-4",
+      "from-slate-200",
+      "to-white",
+      "dark:from-gray-800/75",
+      "dark:to-gray-900",
+    ]}
+  >
+    <hgroup
+      class:list={["container", "mx-auto", "mb-10", "max-w-screen-lg", "py-10"]}
+    >
+      <h1
+        class:list={[
+          "text-5xl",
+          "font-semibold",
+          "text-black",
+          "dark:text-white",
+        ]}
+      >
+        {entry.data.title}
+      </h1>
+      <h2
+        class:list={[
+          "text-xl",
+          "font-semibold",
+          "text-slate-500",
+          "dark:text-slate-400",
+        ]}
+      >
+        {entry.data.subtitle}
+      </h2>
     </hgroup>
   </header>
-  <div id="content" role="document" class="body">
-    <Content frontmatter={entry.data} />
-  </div>
-  {
-    toc && (
-      <aside class="toc">
-        <TableOfContents headings={headings} />
-      </aside>
-    )
-  }
-  {
-    sidebar && (
-      <aside class="sidebar">
-        <article>
-          <header>
-            <strong>{t("sidebar.scheduleVirtualCall.title")}</strong>
-          </header>
-          <p>{t("sidebar.scheduleVirtualCall.content")}</p>
-          <CalEmbed client:only="react" />
-          <hr />
-          <p>{t("sidebar.contact.or")}</p>
-          <div class="grid">
-            <a
-              href="mailto:kev@k11e.com"
-              role="button"
-              class="outline contrast"
-              style="display: flex; align-items: center; justify-content: center;"
+  <div class:list={["px-4"]}>
+    <div
+      class:list={[
+        "container",
+        "mx-auto",
+        "max-w-screen-lg",
+        "mb-5",
+        "grid",
+        "grid-flow-row",
+        "gap-20",
+        "md:grid-cols-[1fr_30%]",
+        "md:h-full",
+        "md:[grid-template-areas:'body_body']",
+        {
+          "md:[grid-template-areas:'body_sidebar']": toc || sidebar,
+        },
+      ]}
+    >
+      <div
+        id="content"
+        role="document"
+        class:list={[
+          "format",
+          "overflow-hidden",
+          "dark:format-invert",
+          "md:[grid-area:body]",
+        ]}
+      >
+        <Content frontmatter={entry.data} />
+      </div>
+      <aside
+        class:list={[
+          "hidden",
+          "md:inline-grid",
+          "md:[grid-area:sidebar]",
+          "md:sticky",
+          "md:top-0",
+          "md:self-start",
+          "gap-10",
+        ]}
+      >
+        {toc && <TableOfContents headings={headings} />}
+        {
+          sidebar && (
+            <div
+              class:list={[
+                "sidebar",
+                "text-balance",
+                "overflow-hidden",
+                "text-gray-900",
+                "dark:text-white",
+              ]}
             >
-              {t("sidebar.contact.ctaEmail")}
-            </a>
-            <a href="tel://18444487602" role="button" class="outline contrast">
-              {t("sidebar.contact.ctaCall")} <br />
-              1-844-448-7602
-            </a>
-          </div>
-        </article>
-
-        {testimonialsType && <Testimonials service={testimonialsType} />}
+              <header
+                class:list={[
+                  "font-bold",
+                  "mb-2",
+                  "underline",
+                  "decoration-slate-200",
+                  "underline-offset-4",
+                  "dark:decoration-slate-700",
+                ]}
+              >
+                {t("sidebar.scheduleVirtualCall.title")}
+              </header>
+              {t("sidebar.scheduleVirtualCall.content")}
+              <div class:list={["-m-8", "pt-2", "scale-90"]}>
+                <CalEmbed client:only="react" />
+              </div>
+              <div
+                class:list={[
+                  "inline-flex",
+                  "w-full",
+                  "items-center",
+                  "justify-center",
+                ]}
+              >
+                <hr
+                  class:list={[
+                    "my-8",
+                    "h-px",
+                    "w-64",
+                    "border-0",
+                    "bg-gray-200",
+                    "dark:bg-gray-700",
+                  ]}
+                />
+                <span
+                  class:list={[
+                    "absolute",
+                    "left-1/2",
+                    "-translate-x-1/2",
+                    "bg-white",
+                    "px-3",
+                    "font-medium",
+                    "text-gray-900",
+                    "dark:bg-gray-900",
+                    "dark:text-white",
+                  ]}
+                >
+                  {t("sidebar.contact.or")}
+                </span>
+              </div>
+              <div class:list={["flex", "gap-8"]}>
+                <a
+                  href="mailto:kev@k11e.com"
+                  class:list={[
+                    "mb-2",
+                    "me-2",
+                    "rounded-lg",
+                    "bg-gradient-to-br",
+                    "from-purple-600",
+                    "to-blue-500",
+                    "px-5",
+                    "py-2.5",
+                    "text-center",
+                    "text-sm",
+                    "font-medium",
+                    "text-white",
+                    "hover:bg-gradient-to-bl",
+                    "focus:outline-none",
+                    "focus:ring-4",
+                    "focus:ring-blue-300",
+                    "dark:focus:ring-blue-800",
+                    "content-center",
+                    "flex-grow",
+                  ]}
+                >
+                  {t("sidebar.contact.ctaEmail")}
+                </a>
+                <a
+                  href="tel://18444487602"
+                  class:list={[
+                    "mb-2",
+                    "me-2",
+                    "rounded-lg",
+                    "bg-gradient-to-r",
+                    "from-purple-500",
+                    "to-pink-500",
+                    "px-5",
+                    "py-2.5",
+                    "text-center",
+                    "text-sm",
+                    "font-medium",
+                    "text-white",
+                    "hover:bg-gradient-to-l",
+                    "focus:outline-none",
+                    "focus:ring-4",
+                    "focus:ring-purple-200",
+                    "dark:focus:ring-purple-800",
+                    "content-center",
+                  ]}
+                >
+                  {t("sidebar.contact.ctaCall")} <br />
+                  <span class="whitespace-nowrap">
+                    1-844-448-7602
+                  </span>
+                </a>
+              </div>
+              {testimonialsType && <Testimonials service={testimonialsType} />}
+            </div>
+          )
+        }
       </aside>
-    )
-  }
+    </div>
+  </div>
 </main>
-
-<style lang="scss">
-  @use "sass:map";
-  @use "@picocss/pico/scss/settings" as *;
-
-  body > main.container {
-    display: grid;
-    grid-template-columns: 1fr 30%;
-    grid-template-rows: auto auto 1fr;
-    grid-template-areas:
-      "header header"
-      "body body";
-    column-gap: 2rem;
-
-    &.toc.sidebar {
-      grid-template-areas:
-        "header header"
-        "body toc"
-        "body sidebar";
-    }
-
-    &.toc {
-      grid-template-areas:
-        "header header"
-        "body toc";
-    }
-
-    &.sidebar {
-      grid-template-areas:
-        "header header"
-        "body sidebar";
-    }
-
-    .header {
-      grid-area: header;
-      margin-bottom: 2rem;
-    }
-
-    .body {
-      grid-area: body;
-    }
-
-    .toc {
-      grid-area: toc;
-    }
-
-    .sidebar {
-      grid-area: sidebar;
-    }
-
-    @media (max-width: map.get($breakpoints, xl, breakpoint)) {
-      grid-template-columns: 1fr 20rem;
-    }
-
-    @media (max-width: map.get($breakpoints, lg, breakpoint)) {
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr;
-      &,
-      &.toc,
-      &.sidebar,
-      &.toc.sidebar {
-        grid-template-areas:
-          "header"
-          "toc"
-          "body"
-          "sidebar";
-      }
-
-      .toc,
-      .body {
-        margin-bottom: 2rem;
-      }
-    }
-  }
-</style>

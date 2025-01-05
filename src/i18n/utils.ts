@@ -45,24 +45,19 @@ export function useTranslatedPath(lang: Language) {
   };
 }
 
-export function getRouteFromUrl(url: URL): string | undefined {
+export function getOriginalRouteFromUrl(url: URL): string | undefined {
   const pathname = new URL(url).pathname;
   const currentLang = getLangFromUrl(url);
 
   const path = pathname.replace(/^\/+/, "").replace(`${currentLang}/`, "");
 
-  if (path === undefined) {
-    return undefined;
-  }
-
-  if (defaultLang === currentLang) {
-    const route = Object.values(routes)[0];
-    return route[path] !== undefined ? route[path] : undefined;
+  if (defaultLang === currentLang || path === undefined) {
+    return path;
   }
 
   const getKeyByValue = (
     obj: Record<string, string>,
-    value: string
+    value: string,
   ): string | undefined => {
     return Object.keys(obj).find((key) => obj[key] === value);
   };

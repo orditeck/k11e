@@ -6,11 +6,14 @@ import MainContent from "../layouts/MainContent.astro";
 
 export async function getStaticPaths() {
   return (await getCollection("pages"))
-    .filter(({ slug }) => !slug.includes("/"))
-    .map((page) => ({
-      params: { slug: page.slug },
-      props: page,
-    }));
+    .map((page) => {
+      const [lang, ...slug] = page.slug.split("/");
+      return {
+        params: { lang, slug: slug.join("/") || undefined },
+        props: page,
+      };
+    })
+    .filter(({ params }) => params.lang === "en");
 }
 
 type Props = CollectionEntry<"pages"> & {
@@ -19,7 +22,6 @@ type Props = CollectionEntry<"pages"> & {
     entry: CollectionEntry<"pages">;
     toc?: boolean;
     sidebar?: boolean;
-    width?: "veryNarrow" | "narrow" | "largeAdaptive" | "normal";
   };
 };
 
@@ -28,12 +30,10 @@ let {
   title,
   toc = true,
   sidebar = true,
-  width,
 } = page.data;
-width = width || (toc || sidebar ? "largeAdaptive" : "narrow");
 ---
 
-<Layout title={title} width={width}>
+<Layout title={title}>
   <MainNav />
   <MainContent entry={page} toc={toc} sidebar={sidebar} />
 </Layout>

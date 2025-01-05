@@ -1,0 +1,87 @@
+---
+import crypto from "crypto";
+
+interface Props {
+  title: string;
+  expanded?: boolean;
+  first?: boolean;
+  last?: boolean;
+}
+
+const { title, expanded, first, last } = Astro.props;
+const targetId =
+  "a" +
+  crypto
+    .createHash("shake256", { outputLength: 8 })
+    .update(title, "utf8")
+    .digest("hex");
+const titleId = `accordion-collapse-heading-${targetId}`;
+---
+
+<div class="not-format">
+  <h2 id={titleId}>
+    <button
+      type="button"
+      class:list={[
+        "flex",
+        "w-full",
+        "items-center",
+        "justify-between",
+        "gap-3",
+        "border",
+        "border-gray-200",
+        "p-5",
+        "font-medium",
+        "text-gray-500",
+        "hover:bg-gray-100",
+        "focus:ring-4",
+        "focus:ring-gray-200",
+        "dark:border-gray-700",
+        "dark:text-gray-400",
+        "dark:hover:bg-gray-800",
+        "dark:focus:ring-gray-800",
+        "rtl:text-right",
+        { "rounded-t-xl": first === true, "border-b-0": last !== true },
+      ]}
+      data-accordion-target={`#${targetId}`}
+      aria-expanded={expanded === true ? "true" : "false"}
+      aria-controls={targetId}
+    >
+      <span>{title}</span>
+      <svg
+        data-accordion-icon
+        class="h-3 w-3 shrink-0 rotate-180"
+        aria-hidden="true"
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 10 6"
+      >
+        <path
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9 5 5 1 1 5"></path>
+      </svg>
+    </button>
+  </h2>
+</div>
+<div id={targetId} class="hidden" aria-labelledby={titleId}>
+  <div
+    class:list={[
+      "border",
+      "border-gray-200",
+      "p-5",
+      "dark:border-gray-700",
+      "dark:bg-gray-900",
+      {
+        "border-b-0": last !== true,
+        "border-t-0": last === true,
+      },
+    ]}
+  >
+    <div class="format">
+      <slot />
+    </div>
+  </div>
+</div>

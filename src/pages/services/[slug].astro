@@ -6,17 +6,23 @@ import MainContent from "../../layouts/MainContent.astro";
 
 export async function getStaticPaths() {
   return (await getCollection("services"))
-    .filter(({ slug }) => !slug.includes("/"))
-    .map((page) => ({
-      params: { slug: page.slug },
-      props: page,
-    }));
+    .map((page) => {
+      const [lang, ...slug] = page.slug.split("/");
+      return {
+        params: { lang, slug: slug.join("/") || undefined },
+        props: page,
+      };
+    })
+    .filter(({ params }) => params.lang === "en");
 }
 
 const page = Astro.props;
+const {
+  toc = true,
+} = page.data;
 ---
 
-<Layout title={page.data.title} width="largeAdaptive">
+<Layout title={page.data.title}>
   <MainNav />
-  <MainContent entry={page} />
+  <MainContent entry={page} toc={toc} />
 </Layout>
