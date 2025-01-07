@@ -48,12 +48,12 @@ const translatePath = useTranslatedPath(lang);
   </div>
   <div
     class:list={[
-      "place-self-center",
+      "place-self-start",
       "text-center",
       "md:text-left",
       {
-        "md:place-self-start": position === "left",
-        "md:place-self-end": position === "right",
+        "md:justify-self-start": position === "left",
+        "md:justify-self-end": position === "right",
       },
     ]}
   >
