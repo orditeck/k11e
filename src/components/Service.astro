@@ -48,7 +48,9 @@ const translatePath = useTranslatedPath(lang);
   </div>
   <div
     class:list={[
-      "place-items-center",
+      "place-self-center",
+      "text-center",
+      "md:text-left",
       {
         "md:place-self-start": position === "left",
         "md:place-self-end": position === "right",
@@ -86,7 +88,9 @@ const translatePath = useTranslatedPath(lang);
           "mt-6",
           "flex",
           "items-center",
+          "justify-center",
           "gap-4",
+          "md:justify-start",
           {
             "md:justify-end": position === "right",
           },
