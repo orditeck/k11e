@@ -60,8 +60,8 @@ const services = (await getCollection("services"))
           "flex-col",
           "justify-between",
           "py-24",
-          "lg:px-5",
-          "px-10",
+          "px-4",
+          "lg:px-6",
           "text-right",
           "max-w-screen-lg",
           "mx-auto",
@@ -91,7 +91,9 @@ const services = (await getCollection("services"))
           </div>
         </div>
 
-        <div class="flex flex-wrap justify-end gap-4 self-end">
+        <div
+          class:list={["flex", "flex-wrap", "justify-end", "gap-4", "self-end"]}
+        >
           <a
             href={`${homeUrl}#services`}
             role="button"
@@ -102,7 +104,6 @@ const services = (await getCollection("services"))
               "justify-center",
               "p-0.5",
               "mb-2",
-              "me-2",
               "overflow-hidden",
               "text-lg",
               "font-medium",
@@ -145,7 +146,6 @@ const services = (await getCollection("services"))
               "justify-center",
               "p-0.5",
               "mb-2",
-              "me-2",
               "overflow-hidden",
               "text-lg",
               "font-medium",
