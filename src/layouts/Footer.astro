@@ -17,7 +17,9 @@ const services = (await getCollection("services"))
     ...item,
     slug: (() => {
       const [_, ...slug] = item.slug.split("/");
-      return '/' + (lang !== "en" ? `${lang}/` : "") + "services/" + slug.join("/");
+      return (
+        "/" + (lang !== "en" ? `${lang}/` : "") + "services/" + slug.join("/")
+      );
     })(),
   }));
 ---
@@ -173,7 +175,7 @@ const services = (await getCollection("services"))
             "dark:text-slate-300",
           ]}
         >
-          Copyright © {new Date().getFullYear()} k11e. {
+          Copyright © {new Date().getFullYear()} Solutions k11e inc. {
             t("footer.allRightsReserved")
           }
         </p>
