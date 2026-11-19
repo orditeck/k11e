@@ -1,0 +1,1 @@
+var e=`k11e:manual-playback-start`;function t(t){document.dispatchEvent(new CustomEvent(e,{detail:t}))}export{e as n,t};

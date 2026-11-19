@@ -1,0 +1,708 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://garden.k11e.com/atom.xml</id>
+    <title>Keven Lefebvre</title>
+    <updated>2026-11-17T00:00:00.000Z</updated>
+    <author>
+        <name>Keven Lefebvre</name>
+    </author>
+    <link rel="alternate" href="https://k11e.com/writing/"/>
+    <link rel="self" href="https://k11e.com/atom.xml"/>
+    <subtitle>Writing by Keven Lefebvre.</subtitle>
+    <entry>
+        <title type="html"><![CDATA[Actual Budget and HTTPS: a 2025 setup experiment]]></title>
+        <id>https://garden.k11e.com/Blog/Docker-Composer-for-Actual-Budget-with-auto-SSL-creation/</id>
+        <link href="https://k11e.com/writing/actual-budget/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[A few free minutes, a SharedArrayBuffer error and a self-signed certificate: my 2025 Compose file, kept as an artifact rather than current instructions.]]></summary>
+        <content type="html"><![CDATA[<div lang="en"><p>A short free evening met a surprisingly uncooperative server setup. This is the Compose experiment I shared in January 2025, not a current installation guide.</p>
+<p>The other night, I only had a few precious minutes free to myself. And how better to use that time but to quickly set up an <a href="https://actualbudget.org/">Actual Budget</a> server!</p>
+<p>I use Portainer to manage my Docker containers, through <em>Stacks</em>. They're basically <code>docker-compose.yml</code> files.</p>
+<p>Since AB (that's Actual Budget) was running on a server in my house and not directly on the computer I wanted to access it from, I couldn't use <code>localhost:5006</code>. It wasn't running locally. I had to use the server's address instead, like <code>192.0.2.42:5006</code> in this documentation-only example. However, I was welcomed by a message that Actual needed <a href="https://actualbudget.org/docs/troubleshooting/shared-array-buffer">SharedArrayBuffer</a>.</p>
+<p>K. Quick Google. SharedArrayBuffer needs a secure context. K. <em>Try https</em>. Doesn't work. It doesn't have a certificate. Great.</p>
+<p>Below is the Compose file I shared in 2025—the one I wish I'd found during that short free time that flew away like summer. I would've enjoyed it more. Here ya go stranger, enjoy the sun!</p>
+<p><strong>Historical example, not a current secure recipe:</strong> I haven't verified this configuration for current Actual Budget or Docker. The self-signed certificate uses a placeholder name, has no explicit subject alternative name, and is not automatically trusted by browsers. The generator can replace its key and certificate when run again; the file also doesn't establish startup ordering and uses unpinned images. Simply switching to HTTPS with this file does not establish a trusted connection. For a current setup, consult <a href="https://actualbudget.org/docs/">Actual Budget's documentation</a> and arrange a certificate trusted by the accessing browser for the actual hostname.</p>
+<pre><code>version: '3.1'
+services:
+  generate_ssl:
+    image: alpine
+    volumes:
+      # Gotta be the same as below
+      - ./actual-data:/data
+    entrypoint: ["/bin/sh","-c"]
+    command:
+    - |
+      apk add openssl
+      openssl req -x509 -nodes -days 365 -subj  "/C=CA/ST=QC/O=Company/CN=website.com" -newkey rsa:2048 -keyout /data/selfhost.key -out /data/selfhost.crt
+  actual_server:
+    image: docker.io/actualbudget/actual-server:latest
+    ports:
+      - '5006:5006'
+    environment:
+      - ACTUAL_HTTPS_KEY=/data/selfhost.key
+      - ACTUAL_HTTPS_CERT=/data/selfhost.crt
+    volumes:
+      - ./actual-data:/data
+    restart: unless-stopped
+</code></pre>
+<hr>
+<p>Oh, by the way, if you know a better way to do this, I'd love to hear it—for the greater good!</p></div>]]></content>
+        <published>2025-01-15T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Actual Budget et HTTPS : une expérience de configuration de 2025]]></title>
+        <id>urn:uuid:8b41301f-7aa9-441c-b564-610fce9605ee</id>
+        <link href="https://k11e.com/fr/writing/actual-budget/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Quelques minutes libres, une erreur SharedArrayBuffer et un certificat autosigné : mon fichier Compose de 2025, conservé comme trace plutôt que comme guide actuel.]]></summary>
+        <content type="html"><![CDATA[<div lang="fr"><p>Une courte soirée libre s'est heurtée à une installation de serveur étonnamment peu coopérative. Voici l'expérience Compose que j'avais partagée en janvier 2025, pas un guide d'installation actuel.</p>
+<p>L'autre soir, je n'avais que quelques précieuses minutes à moi. Et quelle meilleure façon de les utiliser que d'installer rapidement un serveur <a href="https://actualbudget.org/">Actual Budget</a>!</p>
+<p>J'utilise Portainer pour gérer mes conteneurs Docker avec les <em>Stacks</em>. Ce sont essentiellement des fichiers <code>docker-compose.yml</code>.</p>
+<p>Comme AB — Actual Budget — fonctionnait sur un serveur chez moi, et non sur l'ordinateur à partir duquel je voulais y accéder, je ne pouvais pas utiliser <code>localhost:5006</code>. Il ne roulait pas localement. Il fallait utiliser l'adresse du serveur, comme <code>192.0.2.42:5006</code> dans cet exemple fictif réservé à la documentation. Mais j'ai été accueilli par un message disant qu'Actual avait besoin de <a href="https://actualbudget.org/docs/troubleshooting/shared-array-buffer">SharedArrayBuffer</a>.</p>
+<p>OK. Petite recherche Google. SharedArrayBuffer a besoin d'un contexte sécurisé. OK. <em>Essaie https.</em> Ça ne fonctionne pas. Il n'y a pas de certificat. Merveilleux.</p>
+<p>Voici le fichier Compose que j'avais partagé en 2025 : celui que j'aurais aimé trouver pendant ce petit moment libre qui s'est envolé aussi vite que l'été. J'en aurais davantage profité. Tiens, personne inconnue, va profiter du soleil!</p>
+<p><strong>Exemple historique, pas une recette de sécurité actuelle :</strong> je n'ai pas vérifié cette configuration avec les versions actuelles d'Actual Budget ou de Docker. Le certificat autosigné utilise un nom fictif, ne contient pas explicitement de nom alternatif du sujet — SAN — et n'est pas automatiquement reconnu comme fiable par les navigateurs. Le générateur peut remplacer la clé et le certificat quand on le relance. Le fichier ne définit pas non plus l'ordre de démarrage et ne fixe pas les versions des images. Passer simplement à HTTPS avec ce fichier n'établit pas une connexion de confiance. Pour une installation actuelle, consultez la <a href="https://actualbudget.org/docs/">documentation d'Actual Budget</a> et prévoyez un certificat reconnu par le navigateur utilisé, pour le véritable nom d'hôte.</p>
+<pre><code>version: '3.1'
+services:
+  generate_ssl:
+    image: alpine
+    volumes:
+      # Gotta be the same as below
+      - ./actual-data:/data
+    entrypoint: ["/bin/sh","-c"]
+    command:
+    - |
+      apk add openssl
+      openssl req -x509 -nodes -days 365 -subj  "/C=CA/ST=QC/O=Company/CN=website.com" -newkey rsa:2048 -keyout /data/selfhost.key -out /data/selfhost.crt
+  actual_server:
+    image: docker.io/actualbudget/actual-server:latest
+    ports:
+      - '5006:5006'
+    environment:
+      - ACTUAL_HTTPS_KEY=/data/selfhost.key
+      - ACTUAL_HTTPS_CERT=/data/selfhost.crt
+    volumes:
+      - ./actual-data:/data
+    restart: unless-stopped
+</code></pre>
+<hr>
+<p>Ah, et si vous connaissez une meilleure façon de faire, j'aimerais bien la connaître. Pour le bien commun!</p></div>]]></content>
+        <published>2026-11-17T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Second-hand, taxed again: my frustration with online reselling]]></title>
+        <id>https://garden.k11e.com/Blog/Second-Hand-Double-Taxed-The-Silent-Government-Scam-in-Online-Reselling/</id>
+        <link href="https://k11e.com/writing/second-hand/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[An unnecessary MacBook purchase, resale fees and a buyer's tax screenshot left me wondering why reusing things has to feel so expensive.]]></summary>
+        <content type="html"><![CDATA[<div lang="en"><p>I turned to eBay to sell a 14-inch MacBook Pro M1 Max I'd bought from a friend. Where I live, finding a buyer for a high-end laptop can take patience, and I wasn't sure I'd get the price I wanted locally.</p>
+<p>When my friend mentioned the MacBook was for sale, I jumped at it. I'd had a string of frustrating experiences with Intel laptops and wanted to give Apple Silicon another shot, even though work had already provided me with one. I'm a serial tech buyer, always chasing the next best thing and not always sure what I actually need. 🤦😬</p>
+<p>Around here, a snowblower or a snowmobile seems to move faster than a top-tier laptop. 🤣 So I listed the MacBook on eBay for $2,500. I'd paid $2,300, taxes included, but an eBay fees calculator suggested I'd end up with around $2,100 or even less. Even at my asking price, I was looking at an estimated loss after fees, not a profit.</p>
+<p>That's partly on me. I didn't really need the laptop, and I knew I wasn't the biggest fan of macOS, but the hardware won me over. I'm rarely quite satisfied with an electronic device I own. Story of my life.</p>
+<p>Then a potential buyer asked for more photos, which I sent. They asked for my best price, and I explained how much the eBay fees would take. That's when they told me eBay was also charging tax and sent a screenshot. I was speechless—and angry.</p>
+<p>I'd already paid tax when I bought the laptop. Seeing another charge added for the buyer felt excessive, and it made me wonder how we'd find a price that worked for both of us. The fees squeezed my side of the transaction; the tax increased what the buyer would pay. Those are different charges, but both mattered to the price we were discussing.</p>
+<p>I dug into it. <a href="https://www.ebay.ca/help/buying/paying-items/paying-tax-ebay-purchases?id=4771">eBay says</a> that, effective July 1, 2022, it collects Canadian sales taxes on sales of tangible goods within Canada from Canada-based buyers on behalf of Canada-based sellers, irrespective of the seller's registration status. The tax shown depends on the transaction and destination; my buyer's screenshot doesn't establish the tax treatment of every sale.</p>
+<p>My first reaction didn't capture the whole picture. The CRA's <a href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/digital-economy-gsthst/charge-collect/sales-good.html">digital-economy guidance</a> distinguishes, for qualifying goods, collection by a registered vendor from collection by a distribution platform operator, depending on the circumstances. A service that only lists or advertises goods is not the same as an operator involved in the transaction. <a href="https://www.revenuquebec.ca/en/businesses/consumption-taxes/gsthst-and-qst/special-cases-gsthst-and-qst/used-property/">Revenu Québec</a> also says used property is generally taxable, while a sale by someone not engaged in commercial activities, such as an individual selling personal items at a garage sale, is not taxable; there are exceptions. That example doesn't settle my eBay listing.</p>
+<p>A later distinction is worth keeping separate: the CRA's <a href="https://www.canada.ca/en/revenue-agency/news/newsroom/tax-tips/tax-tips-2024/operating-digital-platform.html">platform reporting rules</a> require certain platforms to report information about reportable sellers. Reporting is not the same as collecting sales tax, and neither tells an individual seller by itself what income tax, if any, they owe. These sources explain distinctions, not a determination of my own obligations.</p>
+<p>I'm still frustrated, even if I can't say the charge was unlawful. I understand the need to tax commerce, including sales by foreign businesses. But I'd also like it to be easier to reuse things instead of buying new ones. Another charge at checkout made me worry that buying second-hand would be less appealing; my one listing doesn't tell me what buyers generally choose to do. And this account doesn't establish a completed sale or its final price.</p>
+<p>I keep coming back to the same question: if we want people to reuse things, shouldn't we make that easier? I don't have an answer for every tax situation. I just know how strange it felt to see another tax on a used laptop I'd already paid tax on.</p>
+<hr>
+<p>What's your take on this? Have you had similar experiences selling second-hand items online?</p></div>]]></content>
+        <published>2023-12-20T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[D'occasion, taxé encore : ma frustration avec la revente en ligne]]></title>
+        <id>urn:uuid:b40b2e79-fcf4-4561-9266-27e485aab783</id>
+        <link href="https://k11e.com/fr/writing/second-hand/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Un MacBook acheté sans en avoir besoin, des frais de revente et les taxes montrées par un acheteur : pourquoi réutiliser doit-il sembler si coûteux?]]></summary>
+        <content type="html"><![CDATA[<div lang="fr"><p>Je me suis tourné vers eBay pour vendre un MacBook Pro M1 Max de 14 pouces acheté à un ami. Chez nous, trouver preneur pour un portable haut de gamme peut demander de la patience, et je n'étais pas certain d'obtenir le prix voulu localement.</p>
+<p>Quand mon ami m'a dit qu'il vendait son MacBook, j'ai sauté dessus. Après plusieurs expériences frustrantes avec des portables Intel, je voulais donner une autre chance à Apple Silicon, même si le travail m'en avait déjà fourni un. Je suis un acheteur compulsif de techno : toujours à la recherche du prochain meilleur appareil, pas toujours certain de ce dont j'ai vraiment besoin. 🤦😬</p>
+<p>Dans mon coin, une souffleuse ou une motoneige semble se vendre plus vite qu'un portable très haut de gamme. 🤣 J'ai donc affiché le MacBook à 2 500 $ sur eBay. Je l'avais payé 2 300 $, taxes incluses, mais un calculateur de frais eBay laissait entendre qu'il me resterait environ 2 100 $, peut-être moins. Même au prix demandé, je prévoyais une perte après les frais, pas un profit.</p>
+<p>C'est en partie ma faute. Je n'avais pas vraiment besoin du portable et je savais que je n'étais pas le plus grand amateur de macOS, mais le matériel m'avait séduit. Je suis rarement tout à fait satisfait d'un appareil électronique que je possède. L'histoire de ma vie.</p>
+<p>Un acheteur potentiel m'a ensuite demandé d'autres photos. Je les lui ai envoyées. Il m'a demandé mon meilleur prix, et je lui ai expliqué combien les frais eBay allaient gruger. C'est là qu'il m'a dit qu'eBay ajoutait aussi des taxes et m'a envoyé une capture d'écran. Je suis resté sans mots — et en colère.</p>
+<p>J'avais déjà payé des taxes en achetant le portable. Voir une autre somme s'ajouter pour l'acheteur me semblait excessif, et je me demandais comment on allait trouver un prix acceptable pour nous deux. Les frais réduisaient ce qui me resterait; les taxes augmentaient ce qu'il aurait à payer. Ce sont deux choses différentes, mais les deux pesaient sur le prix dont on discutait.</p>
+<p>J'ai creusé. <a href="https://www.ebay.ca/help/buying/paying-items/paying-tax-ebay-purchases?id=4771">eBay indique</a> que, depuis le 1er juillet 2022, la plateforme perçoit les taxes de vente canadiennes sur les ventes de biens corporels au Canada auprès d'acheteurs établis au Canada, pour le compte de vendeurs établis au Canada, que ceux-ci soient inscrits ou non aux fichiers de taxes. Les taxes affichées dépendent de la transaction et de la destination; la capture de mon acheteur ne permet pas de conclure au traitement de toutes les ventes.</p>
+<p>Ma première réaction ne tenait pas compte de tout. Les <a href="https://www.canada.ca/en/revenue-agency/services/tax/businesses/topics/gst-hst-businesses/digital-economy-gsthst/charge-collect/sales-good.html">explications de l'ARC sur l'économie numérique</a> distinguent, pour les biens admissibles, la perception par un vendeur inscrit de celle par un exploitant de plateforme de distribution, selon les circonstances. Un service qui ne fait qu'afficher des annonces n'est pas la même chose qu'un exploitant qui participe à la transaction. <a href="https://www.revenuquebec.ca/en/businesses/consumption-taxes/gsthst-and-qst/special-cases-gsthst-and-qst/used-property/">Revenu Québec</a> précise aussi que les biens usagés sont généralement taxables, tandis qu'une vente par une personne qui n'exerce pas d'activités commerciales, comme un particulier vendant ses biens personnels dans une vente-débarras, ne l'est pas; il existe des exceptions. Cet exemple ne tranche pas le cas de mon annonce eBay.</p>
+<p>Une distinction apparue plus tard mérite de rester séparée : les <a href="https://www.canada.ca/en/revenue-agency/news/newsroom/tax-tips/tax-tips-2024/operating-digital-platform.html">règles de déclaration pour les plateformes</a> obligent certaines plateformes à transmettre des renseignements sur les vendeurs visés. Déclarer des renseignements n'est pas percevoir des taxes de vente. Ni l'un ni l'autre ne dit à lui seul quel impôt sur le revenu un vendeur doit payer, s'il en doit. Ces sources expliquent des distinctions; elles ne déterminent pas mes propres obligations.</p>
+<p>Je reste frustré, même si je ne peux pas affirmer que les taxes étaient illégales. Je comprends qu'il faut taxer le commerce, y compris les ventes d'entreprises étrangères. Mais j'aimerais aussi qu'on facilite la réutilisation plutôt que l'achat de neuf. Une somme de plus au moment de payer me faisait craindre que l'achat d'occasion perde de son attrait. Mon annonce, à elle seule, ne dit toutefois pas ce que les acheteurs choisissent en général. Je parle ici de cette discussion de prix, pas d'une vente conclue à un prix final que je pourrais raconter.</p>
+<p>Je reviens toujours à la même question : si on veut que les gens réutilisent les choses, ne devrait-on pas leur faciliter la tâche? Je n'ai pas de réponse pour chaque situation fiscale. Je sais seulement à quel point ça m'a fait étrange de voir d'autres taxes sur un portable usagé pour lequel j'en avais déjà payé.</p>
+<hr>
+<p>Vous en pensez quoi? Avez-vous vécu des situations semblables en vendant des objets d'occasion en ligne?</p></div>]]></content>
+        <published>2026-11-17T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Let's try again: a badly drawn reset button]]></title>
+        <id>https://garden.k11e.com/Blog/Unlock-your-inner-peace-an-introduction-to-mindfulness-mindfulness/</id>
+        <link href="https://k11e.com/writing/mindfulness/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[My hand-drawn comic about getting angry, getting angry at breathing, and trying again. The reset button is a metaphor, not a feature.]]></summary>
+        <content type="html"><![CDATA[<div lang="en"><h2 id="introduction">A first attempt, and then another</h2>
+<p>My stick figure tries breathing. Then he gets angry that breathing hasn't fixed his anger. That second part matters.</p>
+<p>I drew this comic in English, complete with poorly drawn people and a tiny control-room crew. It gets to the awkward part faster than a definition would: trying to calm down has become one more thing for the character to get frustrated about.</p>
+<p><img src="https://k11e.com/garden-assets/layer-1.png" alt="Hand-drawn stick-figure comic, part 1 of 4. An angry stick figure thinks: &#x22;Stupid thing. Why does it have to be so stupid. Why can&#x27;t it just work. It&#x27;s always like that.&#x22; Then: &#x22;Wait... I&#x27;m upset. Why? Will it matter tomorrow? In a year? I don&#x27;t like to be upset! I want to smile.&#x22; Then, calmer: &#x22;If the poorly drawn stick figure can do it, I can do it. Breathe in... out...&#x22;" width="1749" height="1409" loading="lazy" decoding="async"><br>
+<img src="https://k11e.com/garden-assets/layer-2.png" alt="Hand-drawn stick-figure comic, part 2 of 4. The stick figure fumes: &#x22;This is so stupid! It doesn&#x27;t work! If breathing would solve anger, we&#x27;d know by now! There wouldn&#x27;t be war! Everyone&#x27;s upset! STUPID!&#x22; Three children ask: &#x22;Daddy, play with us!&#x22; He snaps: &#x22;Not now!&#x22; After a blank pause he thinks: &#x22;Let&#x27;s try again...&#x22;" width="1749" height="1450" loading="lazy" decoding="async"><br>
+<img src="https://k11e.com/garden-assets/layer-3.png" alt="Hand-drawn stick-figure comic, part 3 of 4. The stick figure breathes: &#x22;Breathe in... Breathe out... in... out... in... out...&#x22; A magnifying glass over his brain shows a &#x22;Control Center&#x22; where small crew members ask their calm chief: &#x22;Chief! What&#x27;s happening? What should we do?&#x22; The chief reaches for a big &#x22;Reset&#x22; button." width="1749" height="1462" loading="lazy" decoding="async"><br>
+<img src="https://k11e.com/garden-assets/layer-4.png" alt="Hand-drawn stick-figure comic, part 4 of 4. The surprised stick figure thinks: &#x22;I&#x27;m... back! It was not so hard after all! I feel great! I&#x27;m proud of myself!&#x22; He tells the three children: &#x22;I&#x27;m sorry about how I...&#x22; (the rest is scribbled) &#x22;...I love you.&#x22; In the last panel he smiles." width="1749" height="1485" loading="lazy" decoding="async"></p>
+<h2 id="what-is-mindfulness">Noticing where my attention went</h2>
+<p>It's easy for me to get caught up in whatever is happening and forget to ask how I'm feeling. I was skeptical of mindfulness at first. For me, it means pausing to notice my thoughts, feelings and surroundings instead of immediately following them wherever they're going.</p>
+<p>That doesn't mean getting rid of difficult emotions. Or never getting distracted. I'm no expert; I still have to remind myself to pay attention.</p>
+<h2 id="start-small-how-to-practice-mindfulness">The pause before trying again</h2>
+<p>The small thing in this comic isn't the breath count. It's the pause before “Let's try again.” The first attempt hasn't worked the way the character wanted. He notices that he's still caught up in it, and tries once more.</p>
+<p>For me, paying closer attention to a conversation or noticing what I need can be part of that. I don't need another list of daily obligations to fail at.</p>
+<h2 id="just-breathe">Just breathe</h2>
+<p>“Just breathe” sounds very simple when you're not the one who's upset. The drawing lets that advice be annoying before it lets the character return and apologize.</p>
+<p>There isn't really a chief in my head with a reset button. The comic gets to draw one; real life doesn't owe me that tidy ending. Noticing a feeling doesn't erase it, and a breathing exercise doesn't repair a conversation on its own.</p>
+<p>This isn't treatment advice or a promise of relief. The <a href="https://www.nccih.nih.gov/health/meditation-and-mindfulness-effectiveness-and-safety">National Center for Complementary and Integrative Health</a> describes mixed evidence and limitations in mindfulness research, as well as difficult experiences some people report with meditation. Mindfulness isn't a substitute for medical care; treatment decisions belong with a health professional.</p>
+<h2 id="conclusion">Keeping the second attempt</h2>
+<p>The part I want to keep is “Let's try again.” Not the perfect calm at the end. The chance to notice, come back, and choose what to do next—even after the first attempt was mostly being angry at breathing.</p></div>]]></content>
+        <published>2023-02-21T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[How to protect your online privacy]]></title>
+        <id>https://garden.k11e.com/How-to-protect-your-online-privacy/</id>
+        <link href="https://k11e.com/writing/protect-online-privacy/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Start with passwords, recovery and backups; then choose browsing, messaging and network tools for the risks they actually address.]]></summary>
+        <content type="html"><![CDATA[<div lang="en"><h2 id="the-very-basic">Start with the basics</h2>
+<p>This guide started in 2023. Product names below are examples, not a current security audit or a shopping list you need to complete. Check the linked documentation before choosing tools. Start with the accounts and devices you rely on most; adding a VPN while leaving your email easy to take over is the wrong order.</p>
+<p><strong>First, protect access and recovery:</strong></p>
+<ol>
+<li>Use a different strong password for each account. A password manager can help you keep track of them.</li>
+<li>Enable two-factor authentication where available, especially for your email and password manager. Save recovery codes securely and check how to regain access if you lose a device or key. More on hardware keys below.</li>
+<li>Keep devices, browsers and apps updated.</li>
+<li>Keep independent backups of important data and check that you can restore them. Sync can copy an accidental deletion too. Protect backups against unwanted access, and keep any encryption recovery key safe and separate.</li>
+</ol>
+<p><strong>Then reduce everyday exposure:</strong></p>
+<ol start="5">
+<li>Be cautious with unexpected links, attachments and requests to sign in. Go to a service directly when in doubt.</li>
+<li>Review what you share, service privacy settings and app permissions. Download software from sources you trust.</li>
+<li>On shared computers, avoid saving credentials and sign out when finished. A public computer may still be compromised, even after you sign out.</li>
+</ol>
+<p>The next sections address different problems. None replaces these basics, and none makes everything you do anonymous.</p>
+<h2 id="block-ads-tracking-phishing">Reduce ads, tracking and phishing exposure</h2>
+<p>An ad or content blocker can reduce exposure to some ads and third-party trackers. Depending on the tool and its filter lists, it may also block some known malicious domains. It won't catch every tracker, scam or phishing page, and some sites may break until you adjust the settings.</p>
+<p><a href="https://adguard.com/">AdGuard</a> is one option, with different products and features depending on the device. Check what a particular app or DNS service actually filters. Parental filters and anti-tracking settings aren't a substitute for judgment or supervision.</p>
+<h2 id="use-a-secret-tunnel-to-communicate-with-the-internet">Decide whether you need a VPN</h2>
+<h3 id="what-is-a-vpn">What is a VPN?</h3>
+<p>A virtual private network creates an encrypted connection between your device and a VPN server. Your local network can see that you're using the VPN, but generally not the traffic inside that tunnel. The VPN provider handles your traffic after it leaves the tunnel, so you're shifting some trust from your network provider to the VPN provider. HTTPS still matters between you and a website. See the <a href="https://ssd.eff.org/module/choosing-vpn-thats-right-you">EFF's guide to choosing a VPN</a>.</p>
+<h3 id="why-use-a-vpn">Why use a VPN</h3>
+<p>A VPN may be useful for reaching a private network or changing the IP address a site sees. Depending on the network and service, it may also help access blocked content. It doesn't make you anonymous: websites can still recognize signed-in accounts and use other identifiers, and the VPN provider may have access to connection information. A VPN can't provide access without a working route to its server, and it doesn't guarantee protection from malware or phishing.</p>
+<p>Public Wi-Fi isn't automatically unsafe. HTTPS protects the connection to a properly authenticated website, including on a public network. Keep devices updated rather than treating a VPN as a cure-all. See the <a href="https://consumer.ftc.gov/articles/are-public-wi-fi-networks-safe-what-you-need-know">FTC's public Wi-Fi guidance</a>.</p>
+<h3 id="vpn-adguard">VPN + AdGuard?</h3>
+<p>A VPN and a content blocker do different jobs: one routes traffic through a server, while the other filters some requests or page content. Whether they work together depends on the apps and device; using both doesn't prevent all tracking or attacks. Check the relevant setup instructions instead of assuming both protections are active.</p>
+<h2 id="use-an-encrypted-messaging-apps">Choose end-to-end encrypted messaging</h2>
+<p>End-to-end encryption is designed so that message content is readable by the communicating devices, not the messaging service. It does not hide all metadata or protect messages on a compromised or unlocked device.</p>
+<p><a href="https://signal.org/">Signal</a> uses end-to-end encryption for its messages and calls by default. <a href="https://telegram.org/faq#q-how-do-i-make-my-messages-more-secure">Telegram's FAQ</a> distinguishes ordinary cloud chats from end-to-end encrypted Secret Chats. Secret Chats are one-to-one and aren't the default. Choose deliberately, and consider who can access the devices and backups at either end.</p>
+<h2 id="use-a-privacy-focused-browser">Use a privacy-focused browser</h2>
+<p><a href="https://www.mozilla.org/en-CA/firefox/new/">Firefox</a> and <a href="https://brave.com/">Brave</a> offer tracker-protection features. Review their settings and keep whichever browser you choose updated. Private browsing mainly limits what is stored in the local browsing history; it does not make you anonymous to websites or your network.</p>
+<p>Brave also offers <a href="https://support.brave.com/hc/en-us/articles/360018121491-What-is-a-Private-Window-with-Tor-Connectivity-">private windows with Tor connectivity</a>, but that is not a guarantee of anonymity. If anonymity is important, consult the <a href="https://support.torproject.org/faq/staying-anonymous/">Tor Project's guidance</a>. Mozilla also offers a <a href="https://www.mozilla.org/en-CA/firefox/browsers/compare/brave/">browser comparison</a>. Check current support and behavior rather than assuming an old feature description still applies.</p>
+<h2 id="use-two-factor-authentication">Use two-factor authentication</h2>
+<h3 id="what-is-two-factor-authentication">What is two-factor authentication?</h3>
+<p>Two-factor authentication adds another factor to a login, such as a security key or an authenticator code in addition to a password. It makes a stolen password less useful, although some methods can still be phished or bypassed through account recovery. See <a href="https://www.cisa.gov/secure-our-world/turn-mfa">CISA's MFA guidance</a>.</p>
+<h3 id="yubikey">YubiKey</h3>
+<p>A YubiKey is one example of a hardware security key. Where an account supports FIDO security keys, they can offer phishing-resistant authentication. USB and NFC options depend on the key, device and service; follow the account's enrollment instructions.</p>
+<p>Plan for loss before relying on a key: register a second key where supported, and store recovery codes securely. A backup key is a way to recover access, not an additional factor on every login. Check each account's recovery methods too, since those can affect the overall protection.</p>
+<h2 id="consider-moving-away-from-the-big-tech-giants">Consider moving away from the big tech giants</h2>
+<p>Changing providers can reduce reliance on a single company, but a smaller provider is not automatically private or secure. Compare its data practices, security, export options, cost and your ability to recover the account. You do not have to move everything at once.</p>
+<p>For the personal argument and examples of alternatives, see <a href="https://k11e.com/writing/google-or-privacy/">Google or Privacy: which do you value more?</a>.</p></div>]]></content>
+        <published>2023-02-18T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Comment protéger sa vie privée en ligne]]></title>
+        <id>urn:uuid:97a7d240-a502-49d4-bbea-c121ef339598</id>
+        <link href="https://k11e.com/fr/writing/protect-online-privacy/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Commencer par les mots de passe, la récupération et les sauvegardes, puis choisir ses outils selon les risques qu'ils peuvent réellement réduire.]]></summary>
+        <content type="html"><![CDATA[<div lang="fr"><h2 id="the-very-basic">Commencer par la base</h2>
+<p>Ce guide a commencé en 2023. Les produits nommés sont des exemples, pas un audit de sécurité actuel ni une liste d'achats à compléter. Consultez la documentation liée avant de choisir vos outils. Commencez par les comptes et les appareils dont vous dépendez le plus : ajouter un VPN en laissant sa boîte courriel facile à pirater, c'est prendre les choses dans le mauvais ordre.</p>
+<p><strong>D'abord, protéger l'accès et prévoir la récupération :</strong></p>
+<ol>
+<li>Utilisez un mot de passe différent et robuste pour chaque compte. Un gestionnaire de mots de passe peut vous aider à vous y retrouver.</li>
+<li>Activez l'authentification à deux facteurs lorsqu'elle est offerte, surtout pour vos courriels et votre gestionnaire de mots de passe. Conservez les codes de récupération en lieu sûr et vérifiez comment retrouver l'accès si vous perdez un appareil ou une clé. On revient aux clés physiques plus bas.</li>
+<li>Gardez vos appareils, navigateurs et applications à jour.</li>
+<li>Conservez des sauvegardes indépendantes de vos données importantes et vérifiez que vous pouvez les restaurer. La synchronisation peut aussi recopier une suppression accidentelle. Protégez les sauvegardes contre les accès indésirables et gardez toute clé de récupération du chiffrement dans un endroit sûr et distinct.</li>
+</ol>
+<p><strong>Ensuite, réduire l'exposition au quotidien :</strong></p>
+<ol start="5">
+<li>Méfiez-vous des liens, pièces jointes et demandes de connexion inattendus. En cas de doute, ouvrez directement le service plutôt que de suivre le lien reçu.</li>
+<li>Revoyez ce que vous partagez, les paramètres de confidentialité des services et les permissions des applications. Téléchargez vos logiciels de sources auxquelles vous faites confiance.</li>
+<li>Sur un ordinateur partagé, évitez d'enregistrer vos identifiants et déconnectez-vous après utilisation. Un ordinateur public peut rester compromis même après votre déconnexion.</li>
+</ol>
+<p>Les sections suivantes répondent à des problèmes différents. Aucune ne remplace ces bases, et aucune ne rend toutes vos activités anonymes.</p>
+<h2 id="block-ads-tracking-phishing">Réduire l'exposition aux publicités, au suivi et à l'hameçonnage</h2>
+<p>Un bloqueur de publicités ou de contenu peut réduire l'exposition à certaines annonces et à certains traceurs tiers. Selon l'outil et ses listes de filtrage, il peut aussi bloquer des domaines malveillants connus. Il ne détectera pas tous les traceurs, toutes les fraudes ni toutes les pages d'hameçonnage. Certains sites peuvent mal fonctionner jusqu'à ce qu'on ajuste les paramètres.</p>
+<p><a href="https://adguard.com/">AdGuard</a> est une possibilité, avec des produits et des fonctions qui varient selon l'appareil. Vérifiez ce que l'application ou le service DNS filtre réellement. Les filtres parentaux et les réglages contre le suivi ne remplacent ni le jugement ni la supervision.</p>
+<h2 id="use-a-secret-tunnel-to-communicate-with-the-internet">Décider si un VPN répond à votre besoin</h2>
+<h3 id="what-is-a-vpn">Qu'est-ce qu'un VPN?</h3>
+<p>Un réseau privé virtuel crée une connexion chiffrée entre votre appareil et un serveur VPN. Le réseau local peut voir que vous utilisez un VPN, mais généralement pas le trafic à l'intérieur du tunnel. Le fournisseur VPN prend ensuite en charge le trafic à sa sortie : vous lui transférez donc une partie de la confiance accordée à votre fournisseur réseau. HTTPS reste important entre vous et un site Web. Consultez le <a href="https://ssd.eff.org/module/choosing-vpn-thats-right-you">guide de l'EFF pour choisir un VPN</a>.</p>
+<h3 id="why-use-a-vpn">Pourquoi utiliser un VPN?</h3>
+<p>Un VPN peut servir à accéder à un réseau privé ou à changer l'adresse IP visible par un site. Selon le réseau et le service, il peut aussi aider à accéder à du contenu bloqué. Il ne vous rend pas anonyme : un site peut toujours reconnaître un compte connecté et utiliser d'autres identifiants. Le fournisseur VPN peut avoir accès à des renseignements de connexion. Un VPN ne peut pas donner accès à Internet sans un chemin fonctionnel vers son serveur et ne garantit pas une protection contre les logiciels malveillants ou l'hameçonnage.</p>
+<p>Un Wi-Fi public n'est pas automatiquement dangereux. HTTPS protège la connexion à un site correctement authentifié, même sur un réseau public. Gardez vos appareils à jour plutôt que de traiter le VPN comme un remède universel. Voyez les <a href="https://consumer.ftc.gov/articles/are-public-wi-fi-networks-safe-what-you-need-know">conseils de la FTC sur le Wi-Fi public</a>.</p>
+<h3 id="vpn-adguard">VPN et AdGuard?</h3>
+<p>Un VPN et un bloqueur de contenu ne font pas le même travail : le premier fait passer le trafic par un serveur, le second filtre certaines requêtes ou certains éléments de page. Leur compatibilité dépend des applications et de l'appareil. Utiliser les deux n'empêche pas tout suivi ni toute attaque. Consultez les instructions de configuration plutôt que de présumer que les deux protections sont actives.</p>
+<h2 id="use-an-encrypted-messaging-apps">Choisir une messagerie chiffrée de bout en bout</h2>
+<p>Le chiffrement de bout en bout vise à rendre le contenu lisible par les appareils qui communiquent, et non par le service de messagerie. Il ne masque pas toutes les métadonnées et ne protège pas les messages sur un appareil compromis ou déverrouillé.</p>
+<p><a href="https://signal.org/">Signal</a> chiffre ses messages et ses appels de bout en bout par défaut. La <a href="https://telegram.org/faq#q-how-do-i-make-my-messages-more-secure">FAQ de Telegram</a> distingue les conversations ordinaires dans le nuage des échanges secrets chiffrés de bout en bout. Ces derniers sont limités à deux personnes et ne sont pas le mode par défaut. Choisissez en connaissance de cause et pensez aux personnes qui peuvent accéder aux appareils et aux sauvegardes des deux côtés.</p>
+<h2 id="use-a-privacy-focused-browser">Choisir un navigateur axé sur la vie privée</h2>
+<p><a href="https://www.mozilla.org/fr-CA/firefox/new/">Firefox</a> et <a href="https://brave.com/">Brave</a> offrent des fonctions de protection contre le suivi. Examinez leurs réglages et gardez le navigateur choisi à jour. La navigation privée limite surtout ce qui reste dans l'historique local; elle ne vous rend pas anonyme auprès des sites ni du réseau.</p>
+<p>Brave propose aussi des <a href="https://support.brave.com/hc/en-us/articles/360018121491-What-is-a-Private-Window-with-Tor-Connectivity-">fenêtres privées avec connexion à Tor</a>, sans garantie d'anonymat. Si l'anonymat est important, consultez les <a href="https://support.torproject.org/faq/staying-anonymous/">conseils du projet Tor</a>. Mozilla propose également un <a href="https://www.mozilla.org/en-CA/firefox/browsers/compare/brave/">comparatif de navigateurs</a>. Vérifiez la prise en charge et le fonctionnement actuels plutôt que de vous fier à une vieille description de fonction.</p>
+<h2 id="use-two-factor-authentication">Utiliser l'authentification à deux facteurs</h2>
+<h3 id="what-is-two-factor-authentication">Qu'est-ce que l'authentification à deux facteurs?</h3>
+<p>Elle ajoute un autre facteur à la connexion, par exemple une clé de sécurité ou un code d'application d'authentification en plus du mot de passe. Un mot de passe volé devient moins utile, même si certaines méthodes peuvent encore être visées par l'hameçonnage ou contournées par la récupération de compte. Voyez les <a href="https://www.cisa.gov/secure-our-world/turn-mfa">conseils de la CISA sur l'authentification multifacteur</a>.</p>
+<h3 id="yubikey">YubiKey</h3>
+<p>Une YubiKey est un exemple de clé de sécurité physique. Quand un compte prend en charge les clés FIDO, elles peuvent offrir une authentification résistante à l'hameçonnage. Les options USB et NFC dépendent de la clé, de l'appareil et du service. Suivez les instructions d'inscription du compte.</p>
+<p>Prévoyez la perte avant de dépendre d'une clé : inscrivez-en une deuxième lorsque c'est possible et conservez les codes de récupération en lieu sûr. Une clé de secours sert à retrouver l'accès; ce n'est pas un facteur supplémentaire utilisé à chaque connexion. Vérifiez aussi les méthodes de récupération de chaque compte, puisqu'elles influencent la protection d'ensemble.</p>
+<h2 id="consider-moving-away-from-the-big-tech-giants">Envisager d'autres fournisseurs que les géants du numérique</h2>
+<p>Changer de fournisseur peut réduire la dépendance envers une seule entreprise. Un petit fournisseur n'est toutefois pas automatiquement plus privé ou plus sûr. Comparez ses pratiques de traitement des données, sa sécurité, les options d'exportation, le coût et vos possibilités de récupérer le compte. Vous n'avez pas à tout déplacer d'un coup.</p>
+<p>Pour la réflexion personnelle et des exemples de solutions de rechange, voyez <a href="https://k11e.com/fr/writing/google-or-privacy/">Google ou la vie privée : qu'est-ce qui compte le plus pour vous?</a>.</p></div>]]></content>
+        <published>2026-11-17T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Improvements to Cheap Publish]]></title>
+        <id>https://garden.k11e.com/Improvements-to-Cheap-Publish/</id>
+        <link href="https://k11e.com/writing/cheap-publish/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Refusing to pay for Obsidian Publish cost me only countless hours: a 2023 fork story, from frontmatter to wiggling graphs.]]></summary>
+        <content type="html"><![CDATA[<div lang="en"><p>I started using Obsidian in early 2023 and loved it right away. I wanted to publish my notes online. I'd had a blog before, but this felt different. Obsidian felt like that was it.</p>
+<p>Years earlier, I'd started building <a href="https://github.com/orditeck/calepin-frontend">Calepin</a>, a notes app with a separate frontend and API. That was one way to make a place for notes. Cheap Publish was a different question: how could I put the notes I already had on the web?</p>
+<p>This is a snapshot of my 2023 experiment, not a current comparison or a guarantee that these projects still work the same way.</p>
+<p>For installation or current status, start with the <a href="https://github.com/orditeck/cheap-publish">repository documentation</a>. The changes and unfinished lists below describe what I had in 2023, not a setup I've verified today.</p>
+<p>I took a look at the official <a href="https://obsidian.md/publish">Publish</a> service from Obsidian but as a fellow Home Lab-er, there is no way I'd pay to host a personal website. I'd rather spend countless hours hacking something.</p>
+<p>I started searching online for an "Obsidian Publish open source alternative" and found quite a few:</p>
+<ul>
+<li><a href="https://mindstone.tuancao.me/">MindStone</a>: free open-source alternative solution to Obsidian Publish</li>
+<li><a href="https://github.com/yoursamlan/pubsidian">pubsidian</a>: An Obsidian-Publish alternative but it's FREE</li>
+<li><a href="https://github.com/TuanManhCao/digital-garden">TuanManhCao/digital-garden</a> : Free Obisidian Publish alternative, for publishing your digital garden.</li>
+<li><a href="https://www.markbase.xyz/">Markbase</a>: Easily sync and publish your docs, notes, and digital gardens</li>
+<li><a href="https://quartz.jzhao.xyz/">Quartz</a>: Host your second brain and digital garden for free</li>
+<li><a href="https://github.com/binnyva/gatsby-garden/">binnyva/gatsby-garden</a>: A Digital Garden Theme for Gatsby. Gatsby Garden lets you create a static HTML version of your markdown notes</li>
+<li><a href="https://michalkorzonek.com/obsidian-to-github">Obsidian to Github</a>: Create and edit a Jekyll website in Obsidian. Publish to Github without friction.</li>
+<li><a href="https://github.com/ppeetteerrs/obsidian-zola">ppeetteerrs/obsidian-zola</a>: A no-brainer solution to turning your Obsidian PKM into a Zola site.</li>
+</ul>
+<p>None of them were perfect, and neither was the official Publish service. <a href="https://github.com/ppeetteerrs/obsidian-zola">obsidian-zola</a> was my favorite: simple enough, yet packed with features. I gave it a go, but ran into a few bugs. With little recent activity on the repo, I checked the <a href="https://github.com/ppeetteerrs/obsidian-zola/network">Network graph</a> for active forks.</p>
+<p>I landed on <a href="https://github.com/Yarden-zamir/obsidian-zola-plus">Yarden-zamir/obsidian-zola-plus</a>, which adds a preview pop-up from another fork, giscus comments (which I didn't know was a thing), etc.</p>
+<p>Then I found more bugs. Enough to bother me. This time I made <a href="https://github.com/orditeck/cheap-publish">my own fork</a>, because why not. I called it Cheap Publish, 'cause my mom raised me an honest man.</p>
+<p>So what did I change?</p>
+<h2 id="more-flexible-frontmatter-now-called-properties">More flexible frontmatter (now called Properties)</h2>
+<p>I added the following frontmatter keys:</p>
+<ul>
+<li><code>title</code>: allows to override the page's title without changing the filename</li>
+<li><code>created</code>: shows the date the page was initially created, eg: <code>Posted February 13, 2023</code></li>
+<li><code>modified</code>: when present and <code>modified != created</code>, shows both dates, eg: <code>Posted February 1, 2023, last updated February 5, 2023</code></li>
+</ul>
+<p>While working in that section, I re-enabled the read time. My garden's header, for example, showed the posted and updated dates followed by “1 min read.”</p>
+<h3 id="extra">Extra</h3>
+<p>I'm also passing down to <code>zola/templates/content/page.html</code> any <code>extra</code> frontmatter keys. Useful to customize the template based on that.</p>
+<h2 id="ability-to-bypass-the-landing-page">Ability to bypass the landing page</h2>
+<p>I didn't read much about it, but Zola treats the homepage as a "special page". I just wanted a regular page from my note.</p>
+<p>That was possible in my fork. I wasn't 100% sure the landing page still worked, to be perfectly honest with you 😬.</p>
+<p>To bypass the landing page, I set <code>REDIRECT_HOME</code> in <code>netlify.toml</code> to the path to redirect to, e.g. <code>REDIRECT_HOME = "README"</code>. It set the main section's <code>redirect_to</code> setting to that value. Zola's section documentation is <a href="https://www.getzola.org/documentation/content/section/">here</a>; the example describes my 2023 setup, not necessarily the current fork.</p>
+<h2 id="resize-images">Resize images</h2>
+<p>That one was bothering me a lot since it's supported natively in Obsidian.</p>
+<p>For example, these were the two syntaxes I supported for a 100-pixel-wide image:</p>
+<pre><code class="language-md">![Example|100](https://example.com/image.jpg)
+or
+![100](https://example.com/image.jpg)
+</code></pre>
+<p>The URL is a placeholder. At the time this was done dynamically in JavaScript because I was lazy, and it only supported the syntax above.</p>
+<h2 id="a-few-fixes-changes">A few fixes/changes</h2>
+<ul>
+<li>The sidebar no longer reloaded the whole page when clicking a link or anchor</li>
+<li>The graph no longer jumped on the first hover. It was also prettier with a little wiggling animation on load 😻.</li>
+<li>Removed mandatory <code>/docs</code> from URLs, which were then served directly at <code>/</code></li>
+<li>Removed <code>frontmatter=never</code> from <code>local-run.sh</code> (why!?)</li>
+<li>Fixed the URL detection for previews using the host (might not be a solution for all)</li>
+<li>Updated <code>obsidian-export</code> to the latest version available to me then</li>
+<li>Allowed <code>.</code> in filenames, e.g. <code>1. Start here</code>, <code>2. Once Upon A Time</code>, etc. Useful for the sidebar since it was sorted by name.</li>
+<li>Better <code>blockquote</code> style</li>
+<li>Removed (commented-out) single dollar sign $ from LaTeX/katex's <code>renderMathInElement</code></li>
+</ul>
+<h2 id="todo">TODO</h2>
+<p>This was my list in 2023, not a statement of what's still outstanding today.</p>
+<ul>
+<li>Write a proper README with instruction on how to use</li>
+<li>Write some doc about the changes I made to the comment layout (I use Remark42) and/or remove the comment configs and let it up to the user to decide / figure out what they want</li>
+<li>Fix the graph when URL contains a <code>#</code> (current node doesn't seem set)</li>
+<li>Identify external link</li>
+<li>Open external link in new window</li>
+</ul>
+<h2 id="wish-list">Wish list</h2>
+<p>Another snapshot from 2023, not a current roadmap:</p>
+<ul>
+<li>Better support for resized images
+<ul>
+<li><a href="https://help.obsidian.md/How+to/Format+your+notes#Resizing+images">Obsidian doc</a></li>
+<li><a href="https://github.com/zoni/obsidian-export/discussions/59">Discussion on obsidian-export</a></li>
+</ul>
+</li>
+<li>Sort sidebar by using a frontmatter key</li>
+</ul></div>]]></content>
+        <published>2023-02-12T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Mes améliorations à Cheap Publish]]></title>
+        <id>urn:uuid:0d08cf2e-78b2-4cf9-a621-e4c54a05f93f</id>
+        <link href="https://k11e.com/fr/writing/cheap-publish/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Pour éviter de payer Obsidian Publish, il m'a suffi d'y consacrer des heures sans compter. Retour sur mon fork de 2023, ses changements et ses limites.]]></summary>
+        <content type="html"><![CDATA[<div lang="fr"><p>J'ai commencé à utiliser Obsidian au début de 2023 et j'ai tout de suite accroché. Je voulais publier mes notes en ligne. J'avais déjà eu un blogue, mais cette fois, c'était différent. Avec Obsidian, j'avais l'impression d'avoir trouvé ce qu'il me fallait.</p>
+<p>Des années plus tôt, j'avais commencé <a href="https://github.com/orditeck/calepin-frontend">Calepin</a>, une application de notes avec une interface et une API séparées. C'était une façon de créer un endroit pour mes notes. Cheap Publish répondait à une autre question : comment mettre sur le web les notes que j'avais déjà?</p>
+<p>Ce texte décrit mon expérience de 2023. Ce n'est ni un comparatif actuel ni une garantie que ces projets fonctionnent encore de la même façon.</p>
+<p>Pour l'installation ou l'état actuel du projet, commencez par la <a href="https://github.com/orditeck/cheap-publish">documentation du dépôt</a>. Les changements et les listes de travaux ci-dessous sont ceux de 2023, pas une configuration que j'ai vérifiée aujourd'hui.</p>
+<p>J'avais regardé le service officiel <a href="https://obsidian.md/publish">Publish</a> d'Obsidian, mais en amateur de serveurs maison, pas question de payer pour héberger un site personnel. J'aime mieux passer des heures sans compter à bricoler quelque chose.</p>
+<p>J'ai donc cherché « Obsidian Publish open source alternative » et trouvé plusieurs options :</p>
+<ul>
+<li><a href="https://mindstone.tuancao.me/">MindStone</a> : une solution libre et gratuite pour remplacer Obsidian Publish.</li>
+<li><a href="https://github.com/yoursamlan/pubsidian">pubsidian</a> : une autre option à Obsidian Publish, mais GRATUITE.</li>
+<li><a href="https://github.com/TuanManhCao/digital-garden">TuanManhCao/digital-garden</a> : pour publier gratuitement son jardin numérique.</li>
+<li><a href="https://www.markbase.xyz/">Markbase</a> : pour synchroniser et publier ses documents, ses notes et son jardin numérique.</li>
+<li><a href="https://quartz.jzhao.xyz/">Quartz</a> : pour héberger gratuitement son deuxième cerveau et son jardin numérique.</li>
+<li><a href="https://github.com/binnyva/gatsby-garden/">binnyva/gatsby-garden</a> : un thème Gatsby qui produit une version HTML statique de notes Markdown.</li>
+<li><a href="https://michalkorzonek.com/obsidian-to-github">Obsidian to Github</a> : pour créer et modifier un site Jekyll depuis Obsidian et le publier sur GitHub.</li>
+<li><a href="https://github.com/ppeetteerrs/obsidian-zola">ppeetteerrs/obsidian-zola</a> : pour transformer ses notes Obsidian en site Zola sans se compliquer la vie.</li>
+</ul>
+<p>Aucune n'était parfaite, pas plus que le service officiel. Mon préféré était <a href="https://github.com/ppeetteerrs/obsidian-zola">obsidian-zola</a> : assez simple, mais bien garni en fonctionnalités. Je l'ai essayé et j'ai rencontré quelques bogues. Comme le dépôt avait peu d'activité récente, j'ai regardé le <a href="https://github.com/ppeetteerrs/obsidian-zola/network">graphe des forks</a> pour en trouver un plus actif.</p>
+<p>Je suis tombé sur <a href="https://github.com/Yarden-zamir/obsidian-zola-plus">Yarden-zamir/obsidian-zola-plus</a>, qui ajoutait entre autres un aperçu au survol provenant d'un autre fork et les commentaires giscus, dont j'ignorais l'existence.</p>
+<p>Puis j'ai trouvé d'autres bogues. Assez pour que ça m'agace. Cette fois, j'ai fait <a href="https://github.com/orditeck/cheap-publish">mon propre fork</a>, parce que pourquoi pas. Je l'ai appelé Cheap Publish : ma mère m'a élevé pour être honnête.</p>
+<p>Alors, qu'est-ce que j'ai changé?</p>
+<h2 id="more-flexible-frontmatter-now-called-properties">Des métadonnées plus souples</h2>
+<p>J'ai ajouté les clés suivantes au frontmatter, maintenant appelé Properties dans Obsidian :</p>
+<ul>
+<li><code>title</code> : remplacer le titre de la page sans renommer le fichier.</li>
+<li><code>created</code> : afficher la date de création, par exemple <code>Posted February 13, 2023</code>.</li>
+<li><code>modified</code> : lorsqu'elle est présente et différente de <code>created</code>, afficher les deux dates, par exemple <code>Posted February 1, 2023, last updated February 5, 2023</code>.</li>
+</ul>
+<p>Pendant que j'étais dans cette section, j'ai réactivé le temps de lecture. L'en-tête de mon jardin affichait par exemple les dates de publication et de modification, suivies de « 1 min read ».</p>
+<h3 id="extra">Extra</h3>
+<p>Je transmettais aussi toutes les clés <code>extra</code> du frontmatter à <code>zola/templates/content/page.html</code>. Pratique pour adapter le gabarit en fonction de ces valeurs.</p>
+<h2 id="ability-to-bypass-the-landing-page">Contourner la page d'accueil spéciale</h2>
+<p>Je n'avais pas beaucoup creusé le sujet, mais Zola traite la page d'accueil comme une « page spéciale ». Je voulais simplement y afficher une page normale provenant de mes notes.</p>
+<p>Mon fork le permettait. Pour être parfaitement honnête, je n'étais pas certain à 100 % que la page d'accueil d'origine fonctionnait encore 😬.</p>
+<p>Pour la contourner, je définissais <code>REDIRECT_HOME</code> dans <code>netlify.toml</code> avec le chemin de destination, par exemple <code>REDIRECT_HOME = "README"</code>. Cela donnait cette valeur au paramètre <code>redirect_to</code> de la section principale. Voici la <a href="https://www.getzola.org/documentation/content/section/">documentation des sections de Zola</a>; l'exemple décrit ma configuration de 2023, pas nécessairement le fork actuel.</p>
+<h2 id="resize-images">Redimensionner les images</h2>
+<p>Ce manque m'agaçait beaucoup, puisque c'est pris en charge directement dans Obsidian.</p>
+<p>Voici les deux syntaxes que j'acceptais pour une image de 100 pixels de large :</p>
+<pre><code class="language-md">![Example|100](https://example.com/image.jpg)
+or
+![100](https://example.com/image.jpg)
+</code></pre>
+<p>L'URL est fictive. À l'époque, je faisais ça dynamiquement en JavaScript parce que j'étais paresseux, et seules ces syntaxes étaient prises en charge.</p>
+<h2 id="a-few-fixes-changes">Quelques corrections et changements</h2>
+<ul>
+<li>La barre latérale ne rechargeait plus toute la page quand on cliquait sur un lien ou une ancre.</li>
+<li>Le graphe ne sautait plus au premier survol. Il était aussi plus joli, avec une petite animation au chargement 😻.</li>
+<li>J'avais retiré le <code>/docs</code> obligatoire : les pages étaient servies directement à <code>/</code>.</li>
+<li>J'avais retiré <code>frontmatter=never</code> de <code>local-run.sh</code> (pourquoi!?).</li>
+<li>J'avais corrigé la détection des URL d'aperçu à partir de l'hôte; ça ne réglait peut-être pas tous les cas.</li>
+<li>J'avais mis <code>obsidian-export</code> à la dernière version disponible à ce moment-là.</li>
+<li>Les noms de fichiers pouvaient contenir un <code>.</code>, comme <code>1. Start here</code> ou <code>2. Once Upon A Time</code>. Utile pour une barre latérale triée par nom.</li>
+<li>Le style des <code>blockquote</code> était amélioré.</li>
+<li>J'avais désactivé, en le mettant en commentaire, le dollar simple $ dans <code>renderMathInElement</code> de LaTeX/KaTeX.</li>
+</ul>
+<h2 id="todo">À faire</h2>
+<p>C'était ma liste de 2023, pas un état de ce qui reste à faire aujourd'hui :</p>
+<ul>
+<li>Écrire un vrai README avec les instructions d'utilisation.</li>
+<li>Documenter mes changements à la disposition des commentaires — j'utilisais Remark42 — ou retirer leur configuration pour laisser chacun choisir et se débrouiller.</li>
+<li>Corriger le graphe quand l'URL contient un <code>#</code> : le nœud courant ne semblait pas défini.</li>
+<li>Identifier les liens externes.</li>
+<li>Ouvrir les liens externes dans une nouvelle fenêtre.</li>
+</ul>
+<h2 id="wish-list">Liste de souhaits</h2>
+<p>Encore un instantané de 2023, pas une feuille de route actuelle :</p>
+<ul>
+<li>Mieux prendre en charge le redimensionnement des images.
+<ul>
+<li><a href="https://help.obsidian.md/How+to/Format+your+notes#Resizing+images">Documentation d'Obsidian</a></li>
+<li><a href="https://github.com/zoni/obsidian-export/discussions/59">Discussion dans obsidian-export</a></li>
+</ul>
+</li>
+<li>Permettre de trier la barre latérale avec une clé du frontmatter.</li>
+</ul></div>]]></content>
+        <published>2026-11-17T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Blue Iris]]></title>
+        <id>https://garden.k11e.com/Home-Lab/3.2.Blue-Iris/</id>
+        <link href="https://k11e.com/writing/blue-iris/"/>
+        <updated>2026-11-03T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<div lang="en"><p>This article is now part of <a href="https://k11e.com/writing/home-lab-introduction/#cameras">my home lab story</a>.</p></div>]]></content>
+        <published>2023-02-11T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[PhotoPrism]]></title>
+        <id>https://garden.k11e.com/Home-Lab/3.1.Photoprism/</id>
+        <link href="https://k11e.com/writing/photoprism/"/>
+        <updated>2026-11-03T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<div lang="en"><p>This article is now part of <a href="https://k11e.com/writing/home-lab-introduction/#photographs">my home lab story</a>.</p></div>]]></content>
+        <published>2023-02-11T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Google or Privacy: which do you value more?]]></title>
+        <id>https://garden.k11e.com/Google-or-Privacy-which-do-you-value-more/</id>
+        <link href="https://k11e.com/writing/google-or-privacy/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[What an account lockout could take with it, why Google's convenience still matters, and where independent copies give back some control.]]></summary>
+        <content type="html"><![CDATA[<div lang="en"><h2 id="introduction">Introduction</h2>
+<p>I wrote this in 2023 because so much of a digital life can depend on one Google account. Email, photos, documents and calendars are convenient when they work together. But if I lose access to that account, what else goes with it?</p>
+<p>A <a href="https://www.boston.com/news/technology/2022/08/21/a-dad-took-photos-of-his-naked-toddler-for-the-doctor-google-flagged-him-as-a-criminal/">2022 New York Times investigation</a> described fathers whose Google accounts were disabled after they photographed their children for medical care. Police investigated and cleared the fathers, but they remained locked out of their accounts. The story is more complicated than a simple choice between safety and privacy: systems intended to detect abuse can also have serious consequences when they get a case wrong.</p>
+<p>In 2023, as a father of three young children, I found that story worrying. Being wrongly accused over a medical photo is frightening enough; losing access to email and family photos at the same time would make it worse.</p>
+<p>I agree with the argument that people should be able to get their data back when an account is closed. An independent backup cannot settle that question of accountability, but it can make a closure less devastating.</p>
+<h2 id="the-trade-off-google-vs-privacy">The Trade-Off: Google vs. Privacy</h2>
+<p>I understand why people use Google: its services are useful, and they fit together. Advertising is also an important part of its business. Google's <a href="https://policies.google.com/privacy">privacy policy</a> describes what it collects and how it uses that information. Collection and personalization depend on the service and your settings; I wouldn't assume every feature works the same way.</p>
+<p><img src="https://k11e.com/garden-assets/pasted-image-20230218191013.png" alt="Infographic titled &#x22;How well does Google know you?&#x22;. Its &#x22;Who you are&#x22; section reads: &#x22;Facial recognition, voice commands and search tracking gives Google a good idea of who you are and how you live.&#x22; Tiles below: what you look like, what you sound like, your religious and political beliefs, if you have dietary restrictions, how healthy you are, if you have children." width="811" height="781" loading="lazy" decoding="async"><br>
+<small>Infographic by Alice Bonasio from their article <a href="https://medium.com/edtech-trends/infographic-how-much-does-google-know-about-you-d5ee5bd6d01d">How Much Does Google Know About You?</a>. This is an illustration, not a current account-specific inventory.</small></p>
+<p>Take a minute to explore your own account:</p>
+<ul>
+<li><a href="https://myadcenter.google.com/controls">My Ad Center</a>: review advertising personalization and the information available to you there.</li>
+<li><a href="https://myaccount.google.com/dashboard">Google Dashboard</a>: see a summary of services and saved data.</li>
+<li><a href="https://myactivity.google.com/">My Activity</a>: review and manage activity saved to your account.</li>
+</ul>
+<p>Did you consciously decide to share everything you find? For me, that question matters even when the service is convenient.</p>
+<h3 id="to-stay-or-to-move-away">To stay or to move away</h3>
+<p>I don't think the choice has to be all or nothing. You can keep the services that work for you while moving one collection elsewhere, turning off an optional setting, or keeping independent copies. Each alternative has its own trade-offs: cost, trust and the work of maintaining it.</p>
+<h3 id="10-reasons-to-move-away-from-google">Less dependence, more control</h3>
+<p>The strongest reason for me isn't a longer list of Google's faults. It's the concentration of power over my everyday life. Activity collection, ad targeting and location history raise questions about who can use my information. Account closure raises a different question: can I still get to my own files? Turning off an optional setting can address some collection; it cannot make a single account less central to everything else.</p>
+<p>Moving one service can reduce that dependence. It doesn't make the next provider innocent by definition: it can have breaches, tracking or access of its own. I want a usable exit, not just a different logo.</p>
+<h3 id="10-reasons-to-stay-within-the-google-ecosystem">Convenience is a real counterargument</h3>
+<p>Integration, familiarity and collaboration aren't imaginary benefits. Having email, a calendar and documents work together across devices saves effort, especially when the people around you already use them. Free products, third-party connections and new features can make staying attractive too. Support and features vary by product and account; none of that makes the convenience unreal.</p>
+<p>Staying can be reasonable. I'd still want independent copies. Privacy choices and resilience overlap, but they aren't interchangeable: a backup won't stop data collection, and choosing a more private provider won't recover a file I never backed up.</p>
+<h2 id="alternatives-to-google-services">Alternatives to Google Services</h2>
+<p>These are examples from my 2023 discussion, not a ranking of today's products or a description of my current setup. The useful question is what each change gives back—and what responsibility it adds. Check current features, costs and export options before switching. For account and browsing practices rather than this argument about dependence, see <a href="https://k11e.com/writing/protect-online-privacy/">How to protect your online privacy</a>.</p>
+<h3 id="the-importance-of-a-reliable-backup-system">The importance of a reliable backup system</h3>
+<p>Before moving anything, I'd make independent copies and check that I can restore them. The 3-2-1 rule is a useful starting point: three copies of your data, on two kinds of media, with one copy offsite. Sync is not a backup: a deletion or unwanted change can sync too.</p>
+<p>Encrypt backups where appropriate and keep the recovery key somewhere safe and separate. <a href="https://www.veracrypt.fr/">VeraCrypt</a> is one option for encrypted containers; losing the key can also mean losing access to the backup.</p>
+<h3 id="alternative-for-email-calendar">Alternative for Email &#x26; Calendar</h3>
+<h4 id="protonmail-protoncalendar">ProtonMail &#x26; ProtonCalendar</h4>
+<p><img src="https://k11e.com/garden-assets/pasted-image-20230219111040.png" alt="Proton Mail web app with the inbox open, showing a list of messages beside the folders and labels sidebar" width="1365" height="768" loading="lazy" decoding="async"></p>
+<p>Google's policy describes automated processing of content for various purposes. <a href="https://support.google.com/mail/answer/6603">Google says Gmail does not scan messages to show ads</a>, and describes an exception when you choose to make data available to other Google services that support ads. The distinction matters when comparing providers.</p>
+<h5 id="what-is-protonmail">What is ProtonMail</h5>
+<p><a href="https://proton.me/mail">Proton Mail</a> and Proton Calendar are alternatives for someone considering a different provider. Proton describes its <a href="https://proton.me/support/proton-mail-encryption-explained">email encryption</a> and its limits: for example, mail sent to an external address is not automatically end-to-end encrypted in every case. Recipients, subject lines and other metadata also deserve attention; encryption is not a guarantee against a compromised device or account.</p>
+<h5 id="how-to-move-from-gmail-to-protonmail">How to move from Gmail to ProtonMail</h5>
+<p>Proton's <a href="https://proton.me/support/switch-from-gmail-to-proton">migration guide</a> explains its import options. Check what arrived, including calendar data and attachments, before relying on the new account or deleting anything from the old one.</p>
+<h3 id="alternative-for-documents">Alternative for Documents</h3>
+<p>Local files offer direct access on a device; synchronization or a hosted service can make them available elsewhere. Neither approach removes the need for backups or careful access permissions.</p>
+<h4 id="non-collaborative-syncthing">Non-collaborative: Syncthing</h4>
+<p><a href="https://syncthing.net/">Syncthing</a> synchronizes selected folders between devices. It does not itself provide an office suite, so you can edit documents with a local application such as <a href="https://www.libreoffice.org/">LibreOffice</a>. Devices must be configured and maintained, and synchronized changes are not a substitute for independent backups.</p>
+<h4 id="collaborative-nextcloud">Collaborative: NextCloud</h4>
+<p><a href="https://nextcloud.com/">Nextcloud</a> can provide file sharing and collaboration, including integration with <a href="https://nextcloud.com/collaboraonline/">Collabora Online</a>. Self-hosting gives you more responsibility for updates, access controls and backups. Encryption depends on the configuration and feature in use; do not assume every file or collaboration session is end-to-end encrypted.</p>
+<h3 id="alternative-for-photos-videos">Alternative for Photos &#x26; Videos</h3>
+<h4 id="photoprism">Photoprism</h4>
+<p><img src="https://k11e.com/garden-assets/pasted-image-20230219111415.png" alt="PhotoPrism web app showing a grid of photo thumbnails, mostly flowers, with a few photos selected and the selection menu open" width="688" height="429" loading="lazy" decoding="async"></p>
+<h5 id="what-is-photoprism">What is Photoprism</h5>
+<p><a href="https://www.photoprism.app/">PhotoPrism</a> is a photo-management application you can host yourself. I included it as an alternative because organizing a photo library and keeping control of it are both worth considering. Running it also means maintaining storage, updates and backups. Its <a href="https://docs.photoprism.app/user-guide/organize/people/">face recognition documentation</a> discusses limitations; results should not be assumed equally reliable for everyone.</p>
+<p>In my own experiment, PhotoPrism's recognition didn't work as well for my library as Google's. That difference was useful to notice, but it doesn't tell me what data either model was trained on.</p>
+<h5 id="how-to-move-from-google-photos-to-photoprism">How to move from Google Photos to PhotoPrism</h5>
+<p>Start with <a href="https://takeout.google.com/">Google Takeout</a> and PhotoPrism's <a href="https://docs.photoprism.app/getting-started/">getting started documentation</a>. Check the imported photos, videos and metadata before deleting or changing the original collection. Tools such as <a href="https://github.com/TheLastGimbus/GooglePhotosTakeoutHelper">GooglePhotosTakeoutHelper</a> may help organize exports; review their current documentation and limitations first.</p>
+<h4 id="other-alternatives-to-consider">Other alternatives to consider</h4>
+<p><a href="https://photostructure.com/">PhotoStructure</a> and <a href="https://docs.librephotos.com/">LibrePhotos</a> are other names from that exploration. A <a href="https://arstechnica.com/gadgets/2021/06/the-big-alternatives-to-google-photos-showdown/4/">2021 comparison of self-hosted photo managers</a> gives historical context, not a current verdict. Another catalog won't choose for me: import quality, upkeep and getting my originals back matter more than the number of alternatives.</p>
+<h4 id="how-to-automatically-backup-your-photos-videos-from-your-phone">How to automatically backup your photos &#x26; videos from your phone</h4>
+<p>One possible setup is to synchronize a phone's camera folder to a computer or server, then have PhotoPrism index the originals. Consult the current documentation for your phone's sync app and <a href="https://docs.photoprism.app/user-guide/library/originals/">PhotoPrism's indexing instructions</a>; availability and background behavior depend on the platform. Check that new files actually arrive and are indexed.</p>
+<p>This is synchronization, not a complete backup. Keep separate backups and test restoration, including after deletions or device changes.</p>
+<h2 id="other-articles-that-might-interest-you">Other articles that might interest you</h2>
+<ul>
+<li><a href="https://k11e.com/writing/protect-online-privacy/">How to protect your online privacy</a></li>
+</ul></div>]]></content>
+        <published>2023-02-08T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Google ou la vie privée : qu'est-ce qui compte le plus pour vous?]]></title>
+        <id>urn:uuid:6f48a780-2494-4b9a-9f92-9dbbb41bd81e</id>
+        <link href="https://k11e.com/fr/writing/google-or-privacy/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Ce qu'un compte bloqué pourrait emporter avec lui, la commodité bien réelle de Google et le contrôle que redonnent des copies indépendantes.]]></summary>
+        <content type="html"><![CDATA[<div lang="fr"><h2 id="introduction">Introduction</h2>
+<p>J'ai écrit ce texte en 2023 parce qu'une si grande partie de notre vie numérique peut dépendre d'un seul compte Google. Courriels, photos, documents et calendriers : c'est pratique quand tout fonctionne ensemble. Mais si je perds l'accès au compte, qu'est-ce que je perds avec?</p>
+<p>Une <a href="https://www.boston.com/news/technology/2022/08/21/a-dad-took-photos-of-his-naked-toddler-for-the-doctor-google-flagged-him-as-a-criminal/">enquête du New York Times publiée en 2022</a> racontait l'histoire de pères dont Google avait désactivé le compte après qu'ils avaient photographié leurs enfants pour obtenir des soins médicaux. La police avait enquêté et les avait innocentés, mais ils n'avaient toujours pas retrouvé leur compte. Ce n'est pas simplement une question de choisir entre sécurité et vie privée : un système conçu pour détecter des abus peut aussi avoir de lourdes conséquences quand il se trompe.</p>
+<p>En 2023, comme père de trois jeunes enfants, je trouvais cette histoire inquiétante. Être accusé à tort à cause d'une photo médicale serait déjà assez effrayant. Perdre en même temps ses courriels et ses photos de famille ne ferait qu'empirer les choses.</p>
+<p>Je suis d'accord avec l'idée qu'on devrait pouvoir récupérer ses données lorsqu'un compte est fermé. Une sauvegarde indépendante ne règle pas cette question de responsabilité, mais elle peut rendre la fermeture moins dévastatrice.</p>
+<h2 id="the-trade-off-google-vs-privacy">Le compromis entre Google et la vie privée</h2>
+<p>Je comprends pourquoi on utilise Google : ses services sont utiles et fonctionnent bien ensemble. La publicité occupe aussi une place importante dans son modèle d'affaires. Sa <a href="https://policies.google.com/privacy">politique de confidentialité</a> décrit les renseignements recueillis et leur utilisation. La collecte et la personnalisation varient selon le service et les paramètres; je ne présumerais pas que toutes les fonctions marchent de la même façon.</p>
+<p><img src="https://k11e.com/garden-assets/pasted-image-20230218191013.png" alt="Infographie en anglais intitulée « How well does Google know you? ». La section « Who you are » évoque la reconnaissance faciale, les commandes vocales et le suivi des recherches. Les cases portent sur l&#x27;apparence, la voix, les convictions religieuses et politiques, les restrictions alimentaires, la santé et le fait d&#x27;avoir des enfants." width="811" height="781" loading="lazy" decoding="async"><br>
+<small>Infographie d'Alice Bonasio, tirée de <a href="https://medium.com/edtech-trends/infographic-how-much-does-google-know-about-you-d5ee5bd6d01d">How Much Does Google Know About You?</a>. C'est une illustration, pas un inventaire actuel de votre compte.</small></p>
+<p>Prenez une minute pour explorer votre compte :</p>
+<ul>
+<li><a href="https://myadcenter.google.com/controls">Mes préférences publicitaires</a> : examinez la personnalisation des annonces et les renseignements qui y sont présentés.</li>
+<li><a href="https://myaccount.google.com/dashboard">Google Dashboard</a> : consultez un aperçu des services et des données enregistrées.</li>
+<li><a href="https://myactivity.google.com/">Mon activité</a> : examinez et gérez l'activité conservée dans votre compte.</li>
+</ul>
+<p>Avez-vous consciemment choisi de partager tout ce que vous y trouvez? Pour moi, la question reste importante, même quand le service est pratique.</p>
+<h3 id="to-stay-or-to-move-away">Rester ou partir</h3>
+<p>Je ne pense pas que ce soit tout ou rien. On peut garder les services qui nous conviennent tout en déplaçant une collection ailleurs, en désactivant un paramètre facultatif ou en conservant des copies indépendantes. Chaque solution a ses compromis : coût, confiance et entretien.</p>
+<h3 id="10-reasons-to-move-away-from-google">Moins de dépendance, plus de contrôle</h3>
+<p>Pour moi, la meilleure raison n'est pas d'allonger la liste des défauts de Google. C'est le pouvoir concentré sur mon quotidien. La collecte d'activité, le ciblage publicitaire et l'historique de localisation soulèvent la question de savoir qui peut utiliser mes renseignements. La fermeture d'un compte en soulève une autre : est-ce que je peux encore accéder à mes propres fichiers? Désactiver un paramètre facultatif peut limiter une partie de la collecte. Ça ne rend pas le compte moins central pour tout le reste.</p>
+<p>Déplacer un service peut réduire cette dépendance. Ça ne rend pas le prochain fournisseur irréprochable : lui aussi peut subir des fuites, faire du suivi ou avoir accès aux données. Je veux une porte de sortie utilisable, pas seulement un autre logo.</p>
+<h3 id="10-reasons-to-stay-within-the-google-ecosystem">La commodité est un vrai contre-argument</h3>
+<p>L'intégration, les habitudes et la collaboration ne sont pas des avantages imaginaires. Des courriels, un calendrier et des documents qui fonctionnent ensemble sur plusieurs appareils, ça économise des efforts, surtout quand les gens autour utilisent déjà les mêmes outils. Les produits gratuits, les liens avec d'autres applications et les nouvelles fonctions peuvent aussi donner envie de rester. Le soutien et les fonctions varient selon le produit et le compte; ça ne rend pas la commodité moins réelle.</p>
+<p>Rester peut être raisonnable. Je voudrais quand même des copies indépendantes. Vie privée et résilience se recoupent, mais ne sont pas interchangeables : une sauvegarde n'arrête pas la collecte, et choisir un fournisseur plus respectueux ne récupérera pas un fichier que je n'ai jamais sauvegardé.</p>
+<h2 id="alternatives-to-google-services">Des solutions de rechange aux services Google</h2>
+<p>Voici des exemples de ma réflexion de 2023, pas un classement des meilleurs produits d'aujourd'hui ni une description de mon installation actuelle. La question utile : qu'est-ce que chaque changement me redonne, et quelle responsabilité ajoute-t-il? Vérifiez les fonctions, les coûts et les possibilités d'exportation avant de changer. Pour les gestes à poser sur vos comptes et votre navigation plutôt que cette réflexion sur la dépendance, voyez <a href="https://k11e.com/fr/writing/protect-online-privacy/">Comment protéger sa vie privée en ligne</a>.</p>
+<h3 id="the-importance-of-a-reliable-backup-system">L'importance d'une sauvegarde fiable</h3>
+<p>Avant de déplacer quoi que ce soit, je ferais des copies indépendantes et je vérifierais que je peux les restaurer. La règle 3-2-1 est un bon point de départ : trois copies des données, sur deux types de supports, dont une hors site. La synchronisation n'est pas une sauvegarde : une suppression ou une modification indésirable peut se synchroniser aussi.</p>
+<p>Chiffrez les sauvegardes lorsque c'est approprié et conservez la clé de récupération dans un endroit sûr et distinct. <a href="https://www.veracrypt.fr/">VeraCrypt</a> permet notamment de créer des conteneurs chiffrés; perdre la clé peut aussi vouloir dire perdre l'accès à la sauvegarde.</p>
+<h3 id="alternative-for-email-calendar">Courriels et calendrier</h3>
+<h4 id="protonmail-protoncalendar">Proton Mail et Proton Calendar</h4>
+<p><img src="https://k11e.com/garden-assets/pasted-image-20230219111040.png" alt="Application Web Proton Mail : liste de messages dans la boîte de réception, avec les dossiers et les étiquettes dans la barre latérale." width="1365" height="768" loading="lazy" decoding="async"></p>
+<p>La politique de Google décrit le traitement automatisé de contenu à diverses fins. <a href="https://support.google.com/mail/answer/6603">Google affirme que Gmail n'analyse pas les messages pour afficher des annonces</a> et décrit une exception lorsqu'on choisit de rendre des données accessibles à d'autres services Google qui prennent en charge la publicité. La distinction compte quand on compare les fournisseurs.</p>
+<h5 id="what-is-protonmail">Qu'est-ce que Proton Mail?</h5>
+<p><a href="https://proton.me/mail">Proton Mail</a> et Proton Calendar sont des options pour qui envisage un autre fournisseur. Proton explique son <a href="https://proton.me/support/proton-mail-encryption-explained">chiffrement des courriels</a> et ses limites : par exemple, les messages envoyés à une adresse externe ne sont pas automatiquement chiffrés de bout en bout dans tous les cas. Les destinataires, l'objet et les autres métadonnées méritent aussi notre attention. Le chiffrement ne protège pas de tout si l'appareil ou le compte est compromis.</p>
+<h5 id="how-to-move-from-gmail-to-protonmail">Passer de Gmail à Proton Mail</h5>
+<p>Le <a href="https://proton.me/support/switch-from-gmail-to-proton">guide de migration de Proton</a> présente les options d'importation. Vérifiez ce qui est arrivé, y compris les calendriers et les pièces jointes, avant de compter sur le nouveau compte ou de supprimer quoi que ce soit de l'ancien.</p>
+<h3 id="alternative-for-documents">Documents</h3>
+<p>Les fichiers locaux restent directement accessibles sur un appareil; la synchronisation ou un service hébergé peut les rendre accessibles ailleurs. Aucune de ces approches n'élimine le besoin de sauvegardes et de permissions bien gérées.</p>
+<h4 id="non-collaborative-syncthing">Sans édition collaborative : Syncthing</h4>
+<p><a href="https://syncthing.net/">Syncthing</a> synchronise des dossiers choisis entre appareils. Ce n'est pas une suite bureautique : on peut modifier les documents avec une application locale comme <a href="https://www.libreoffice.org/">LibreOffice</a>. Il faut configurer et entretenir les appareils, et la synchronisation ne remplace pas des sauvegardes indépendantes.</p>
+<h4 id="collaborative-nextcloud">Avec collaboration : Nextcloud</h4>
+<p><a href="https://nextcloud.com/">Nextcloud</a> peut offrir le partage de fichiers et la collaboration, notamment grâce à une intégration avec <a href="https://nextcloud.com/collaboraonline/">Collabora Online</a>. L'auto-hébergement ajoute la responsabilité des mises à jour, du contrôle des accès et des sauvegardes. Le chiffrement dépend de la configuration et de la fonction utilisée; il ne faut pas supposer que chaque fichier ou séance collaborative est chiffré de bout en bout.</p>
+<h3 id="alternative-for-photos-videos">Photos et vidéos</h3>
+<h4 id="photoprism">PhotoPrism</h4>
+<p><img src="https://k11e.com/garden-assets/pasted-image-20230219111415.png" alt="Application Web PhotoPrism : grille de vignettes, surtout des fleurs, avec quelques photos sélectionnées et le menu de sélection ouvert." width="688" height="429" loading="lazy" decoding="async"></p>
+<h5 id="what-is-photoprism">Qu'est-ce que PhotoPrism?</h5>
+<p><a href="https://www.photoprism.app/">PhotoPrism</a> est une application de gestion de photos qu'on peut héberger soi-même. Je l'avais inclus parce que l'organisation d'une photothèque et le contrôle qu'on en garde méritent tous deux réflexion. Il faut aussi entretenir le stockage, les mises à jour et les sauvegardes. Sa <a href="https://docs.photoprism.app/user-guide/organize/people/">documentation sur la reconnaissance des visages</a> explique certaines limites; il ne faut pas présumer que les résultats seront aussi fiables pour tout le monde.</p>
+<p>Dans mon essai, la reconnaissance de PhotoPrism fonctionnait moins bien que celle de Google pour ma photothèque. La différence était intéressante à constater, mais elle ne me dit pas avec quelles données l'un ou l'autre des modèles a été entraîné.</p>
+<h5 id="how-to-move-from-google-photos-to-photoprism">Passer de Google Photos à PhotoPrism</h5>
+<p>Commencez par <a href="https://takeout.google.com/">Google Takeout</a> et la <a href="https://docs.photoprism.app/getting-started/">documentation de démarrage de PhotoPrism</a>. Vérifiez les photos, les vidéos et les métadonnées importées avant de supprimer ou de modifier la collection d'origine. Des outils comme <a href="https://github.com/TheLastGimbus/GooglePhotosTakeoutHelper">GooglePhotosTakeoutHelper</a> peuvent aider à organiser les exportations; consultez d'abord leur documentation actuelle et leurs limites.</p>
+<h4 id="other-alternatives-to-consider">D'autres possibilités</h4>
+<p><a href="https://photostructure.com/">PhotoStructure</a> et <a href="https://docs.librephotos.com/">LibrePhotos</a> faisaient aussi partie de cette exploration. Un <a href="https://arstechnica.com/gadgets/2021/06/the-big-alternatives-to-google-photos-showdown/4/">comparatif de 2021 sur les gestionnaires de photos auto-hébergés</a> donne du contexte historique, pas un verdict actuel. Un catalogue de plus ne choisira pas à ma place : la qualité de l'importation, l'entretien et la récupération des originaux comptent davantage que le nombre de solutions.</p>
+<h4 id="how-to-automatically-backup-your-photos-videos-from-your-phone">Automatiser la copie des photos et vidéos du téléphone</h4>
+<p>Une possibilité : synchroniser le dossier de l'appareil photo vers un ordinateur ou un serveur, puis laisser PhotoPrism indexer les originaux. Consultez la documentation actuelle de l'application de synchronisation et les <a href="https://docs.photoprism.app/user-guide/library/originals/">instructions d'indexation de PhotoPrism</a>; la disponibilité et le fonctionnement en arrière-plan dépendent de la plateforme. Vérifiez que les nouveaux fichiers arrivent vraiment et sont indexés.</p>
+<p>C'est de la synchronisation, pas une sauvegarde complète. Gardez des sauvegardes séparées et testez la restauration, notamment après des suppressions ou un changement d'appareil.</p>
+<h2 id="other-articles-that-might-interest-you">À lire aussi</h2>
+<ul>
+<li><a href="https://k11e.com/fr/writing/protect-online-privacy/">Comment protéger sa vie privée en ligne</a></li>
+</ul></div>]]></content>
+        <published>2026-11-17T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Home Assistant]]></title>
+        <id>https://garden.k11e.com/Home-Lab/4.Home-Assistant/</id>
+        <link href="https://k11e.com/writing/home-assistant/"/>
+        <updated>2026-11-03T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<div lang="en"><p>This article is now part of <a href="https://k11e.com/writing/home-lab-introduction/#home-assistant">my home lab story</a>.</p></div>]]></content>
+        <published>2023-02-05T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Home lab: hardware and usage]]></title>
+        <id>https://garden.k11e.com/Home-Lab/2.Hardware-and-Usage/</id>
+        <link href="https://k11e.com/writing/home-lab-hardware/"/>
+        <updated>2026-11-03T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<div lang="en"><p>This article is now part of <a href="https://k11e.com/writing/home-lab-introduction/#machines-with-different-jobs">my home lab story</a>.</p></div>]]></content>
+        <published>2023-02-05T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[My home lab: from two old PCs to a house full of experiments]]></title>
+        <id>https://garden.k11e.com/Home-Lab/1.Introduction/</id>
+        <link href="https://k11e.com/writing/home-lab-introduction/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Lawn-mowing money, game servers, unfinished photo migrations and Tuya frustration: the experiments behind my 2023 home lab.]]></summary>
+        <content type="html"><![CDATA[<div lang="en"><p>I didn't start out wanting a home lab. I wanted to know what was happening behind the button.</p>
+<p>When I was learning PHP, EasyPHP gave me a web server, a database and the rest of the setup in one convenient package. It worked. But I wanted to understand how those pieces fit together, and I didn't want to wait for the next EasyPHP release every time I wanted to try a newer version of something.</p>
+<p>So naturally, the reasonable solution was to get a whole Linux server.</p>
+<p><em>These notes bring together several things I wrote about my home lab in 2023. The equipment and experiments below describe that time, not necessarily what is running at home today.</em></p>
+<h2 id="how-it-started"><span id="but-why"></span>How it started</h2>
+<p>I learned to code by reading online and trying things: HTML and CSS first, then JavaScript, then PHP. I loved PHP. To pay for hardware, I'd find little jobs like mowing lawns, then spend what I earned on computer parts. It was a pretty good trade, as far as I was concerned.</p>
+<p><img src="https://k11e.com/garden-assets/serv3.jpg" alt="Two tower PCs beneath a CRT monitor in a small plywood-walled nook" width="391" height="580" loading="lazy" decoding="async"></p>
+<p>This was my setup at my parents' place in 2006. I had recently added fans. Very serious infrastructure.</p>
+<p>The computer on the left ran Windows XP and a Sphere server for an Ultima Online shard called Apocalypse. There was a community of around a hundred players. The one on the right ran Ubuntu Server—my first experience with Linux—and hosted small web projects, including Orkïka, a medieval browser game I wrote in PHP.</p>
+<p>At other times I hosted Counter-Strike 1.6 and Wolfenstein: Enemy Territory servers, along with voice services. I didn't create those games or voice applications; I loved having a place to run them and figure out how they worked. One missing character in a configuration file could also turn that place into an opportunity to contemplate the meaning of life.</p>
+<p>Running a game world meant more than starting a server process. A later collection of UO-Apocalypse 2 scripts includes separate channels for chatting and trading, a quest involving a missing pickaxe, and capture-the-flag rules for teams and scoring. I don't know that those were the exact scripts on the 2006 machine, or who wrote each one. But they remind me what the computer was there for: giving people things to do together.</p>
+<p>Around the same time, I found a community of people learning to make games with PHP. It eventually became JeuWeb, and I helped run it with other people. The game servers, my own browser game and the forum weren't the same project, but they all gave me reasons to keep figuring things out.</p>
+<p>Those early experiments were also part of <a href="https://k11e.com/how-i-got-here/">how I got into building software for other people</a>.</p>
+<h2 id="machines-with-different-jobs"><span id="cost-4"></span><span id="usage-4"></span><span id="ubiquiti-aps"></span><span id="cost-3"></span><span id="specs-3"></span><span id="usage-3"></span><span id="qnap"></span><span id="cost-2"></span><span id="specs-2"></span><span id="usage-2"></span><span id="the-mandatory-window-server"></span><span id="cost-1"></span><span id="specs-1"></span><span id="usage-1"></span><span id="proxmox-lab-recreational"></span><span id="cost"></span><span id="specs"></span><span id="usage"></span><span id="proxmox-critical"></span>Machines with different jobs</h2>
+<p>Years later, my lab wasn't one server anymore. The question had changed from “can I run this?” to “what happens to everything else when I break it?”</p>
+<p>In 2023, I separated the important jobs from the recreational ones. A little fanless Qotom running Proxmox handled the critical side. Its modest CPU was a feature, not a disappointment: I cared about low power and keeping it running on battery longer during an outage.</p>
+<p>For experiments, I used a refurbished Lenovo ThinkCentre. It was an inexpensive second-hand office PC, but it gave me a separate place to play with web development, photos and Home Assistant. Virtualization meant I could give different projects their own space without buying a whole computer for each one.</p>
+<p>I also had a Windows machine for software that needed Windows or dedicated processing power, and a small QNAP NAS for storage. The NAS wasn't powerful, so I tried to keep its job simple: files, synchronization with Syncthing and backups elsewhere for the important stuff. A NAS is convenient; it isn't a substitute for a backup.</p>
+<h2 id="the-network"><span id="adguard"></span><span id="unifi-controller"></span><span id="pfsense"></span>The network in between</h2>
+<p>The software around those machines was part of the fun. I used pfSense as a router and firewall, the UniFi controller with my access points, and AdGuard for DNS filtering. I had tried OPNsense too, but pfSense did what I needed at the time. The Wi-Fi 6 upgrade was one I had looked forward to, and I wasn't disappointed.</p>
+<p>None of that makes the network finished. It just means I had a working arrangement and, inevitably, more things I wanted to try.</p>
+<h2 id="photographs"><span id="photoprism"></span>The photographs I didn't quite want to leave behind</h2>
+<p>Google Photos was harder to leave than I wanted it to be. The interface was good, sharing was easy, and the automatic memories were fun. But I had been thinking about having more control over my photos, especially after Google removed the old Drive connection that had let me back them up to my NAS.</p>
+<p>In 2023, I exported the library with Google Takeout, put it on the NAS and pointed PhotoPrism at a read-only copy. I set up an off-site backup before considering deleting anything from Google Photos. The first backup took something like a week or two. By the time it finished, I'd moved on to other projects—and I wasn't entirely happy with PhotoPrism's face recognition for my library. The plan to remove older photos from Google hadn't happened.</p>
+<p>The export exposed another problem: I had <em>so many</em> almost-identical photos. Tap, tap, tap, just to make sure I got one good shot. Then I'd keep all of them and pay for more storage instead of choosing. That's a kind of debt that doesn't look like debt until you see years of it in one place.</p>
+<p>It got me thinking about how easy it is to collect things without spending much time with them. Remember discovering a band through a CD, or finding a game at a friend's house? I still wonder what changes when the next song, photo or game is always one tap away.</p>
+<h2 id="home-assistant"><span id="what-i-look-forward-to-trying"></span><span id="tuya"></span><span id="what-i-dislike"></span><span id="localtuya"></span><span id="what-i-can-live-with"></span><span id="aqara-any-xiaomi-devices"></span><span id="zigbee-zigbee2mqtt"></span><span id="adaptive-lighting"></span><span id="my-favorite-automations-and-features"></span><span id="what-i-particularly-like"></span><span id="the-integrations-smart-devices-services"></span><span id="main-hub"></span><span id="clients"></span><span id="server"></span><span id="the-hardware"></span><span id="my-setup"></span>A house that can do a few things for itself</h2>
+<p>Home Assistant was another experiment that kept growing. A Raspberry Pi was expensive and difficult to find locally, and I wasn't sure how much computing power I'd eventually need. I went with a refurbished PC, installed Proxmox, and ran Home Assistant in a virtual machine. The computer could do more than just one thing, which made me happy.</p>
+<p>The beginning was intimidating: devices, integrations, protocols, automations, and YAML, which I wasn't used to yet. Then I discovered I liked editing automations in VS Code. There was a UI too, but at the time I was firmly on team YAML.</p>
+<p>My favorite was Adaptive Lighting. Lights could adjust their brightness and color temperature through the day, so I didn't have to keep thinking about whether a room was too bright or too warm. A button to open and close the blinds made me feel like I was living in the future. Little things, but I enjoyed them.</p>
+<p>Not every experiment was a success. I'd bought Wi-Fi bulbs and plugs that depended on Tuya, and dealing with disconnects, delays and cloud communication was frustrating—especially after spending money on them. I tried localtuya with some devices and gradually moved toward Zigbee. I liked being able to mix devices from different manufacturers, and when I found a device without a converter, I made one and opened a pull request so someone else could use it too.</p>
+<p>There was always another idea on the list: better energy information, useful temperature and humidity automations, plant reminders. That's part of the appeal. It's also how “just one more automation” becomes an afternoon.</p>
+<h2 id="cameras"><span id="blue-iris"></span><span id="our-setup"></span><span id="security-first"></span>Cameras, performance and a little caution</h2>
+<p>I used Blue Iris for camera recording. One thing I noticed was that leaving a camera-group view open could use a surprising amount of CPU. Lowering the group's default frame rate made a noticeable difference on my setup. It was a useful reminder that the cost of a system isn't only the hardware sitting in a corner; it's also what you ask it to do all day.</p>
+<p>I organized recordings into separate groups with their own retention rules. I also spent time thinking about how to limit camera exposure rather than simply opening the recorder to the internet. Those choices depend on the network and software versions, so my old notes aren't a ready-made security recipe.</p>
+<h2 id="why-keep-a-lab"><span id="next"></span>Why keep a lab?</h2>
+<p>I like owning more of my data, but that's only part of it. I like trying things, understanding why they work, breaking them, and eventually getting them working again. Sometimes the result is a useful service. Sometimes it's a new appreciation for how much work a convenient service was doing for me.</p>
+<p>And sometimes it's an entire evening lost to one missing character. Still worth it. Usually.</p></div>]]></content>
+        <published>2023-02-05T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Mon labo maison : de deux vieux PC à une maison pleine d'expériences]]></title>
+        <id>urn:uuid:cf735d4a-5a7d-4dfa-a3d4-e2b71ce9c038</id>
+        <link href="https://k11e.com/fr/writing/home-lab-introduction/"/>
+        <updated>2026-11-17T00:00:00.000Z</updated>
+        <summary type="html"><![CDATA[Des pelouses tondues pour acheter des pièces aux serveurs de jeux, aux photos jamais tout à fait migrées et aux frustrations avec Tuya : mon labo maison de 2023.]]></summary>
+        <content type="html"><![CDATA[<div lang="fr"><p>Au départ, je ne voulais pas un labo maison. Je voulais comprendre ce qui se passait derrière le bouton.</p>
+<p>Quand j'apprenais PHP, EasyPHP me donnait un serveur web, une base de données et le reste dans un seul paquet pratique. Ça fonctionnait. Mais je voulais comprendre comment les morceaux s'agençaient, et je n'avais pas envie d'attendre la prochaine version d'EasyPHP chaque fois que je voulais essayer une version plus récente d'un composant.</p>
+<p>La solution raisonnable était donc, évidemment, de me procurer un serveur Linux complet.</p>
+<p><em>Ce texte rassemble plusieurs notes sur mon labo maison écrites en 2023. Le matériel et les expériences décrivent cette époque, pas nécessairement ce qui fonctionne chez moi aujourd'hui.</em></p>
+<h2 id="how-it-started"><span id="but-why"></span>Les débuts</h2>
+<p>J'ai appris à programmer en lisant sur Internet et en essayant : HTML et CSS d'abord, puis JavaScript, puis PHP. J'adorais PHP. Pour financer le matériel, je trouvais de petits travaux comme tondre des pelouses, puis je dépensais l'argent en pièces d'ordinateur. Ça me semblait un très bon échange.</p>
+<p><img src="https://k11e.com/garden-assets/serv3.jpg" alt="Deux tours de PC sous un écran cathodique, dans un petit coin aux murs de contreplaqué" width="391" height="580" loading="lazy" decoding="async"></p>
+<p>C'était mon installation chez mes parents en 2006. Je venais d'ajouter des ventilateurs. De l'infrastructure très sérieuse.</p>
+<p>L'ordinateur de gauche roulait sous Windows XP et hébergeait un serveur Sphere pour un monde Ultima Online appelé Apocalypse. Il y avait une communauté d'environ cent joueurs. Celui de droite roulait sous Ubuntu Server — ma première expérience avec Linux — et hébergeait de petits projets web, dont Orkïka, un jeu médiéval que j'avais écrit en PHP.</p>
+<p>À d'autres moments, j'ai hébergé des serveurs Counter-Strike 1.6 et Wolfenstein: Enemy Territory, ainsi que des services de communication vocale. Je n'avais pas créé ces jeux ni ces applications; j'aimais avoir un endroit où les faire fonctionner et comprendre comment ils marchaient. Un seul caractère manquant dans un fichier de configuration pouvait aussi transformer cet endroit en occasion de contempler le sens de la vie.</p>
+<p>Faire vivre un monde de jeu, c'était plus que démarrer un serveur. Une collection ultérieure de scripts UO-Apocalypse 2 contient des canaux distincts pour discuter et commercer, une quête autour d'une pioche perdue et des règles de capture du drapeau avec équipes et pointage. Je ne sais pas si c'étaient exactement les scripts de la machine de 2006, ni qui avait écrit chacun d'eux. Mais ils me rappellent à quoi servait l'ordinateur : donner aux gens des choses à faire ensemble.</p>
+<p>Vers la même époque, j'ai trouvé une communauté de gens qui apprenaient à créer des jeux en PHP. Elle est ensuite devenue JeuWeb, que j'ai aidé à administrer avec d'autres. Les serveurs de jeux, mon propre jeu web et le forum étaient des projets distincts, mais ils me donnaient tous des raisons de continuer à comprendre comment les choses fonctionnaient.</p>
+<p>Ces expériences font aussi partie de <a href="https://k11e.com/how-i-got-here/">mon parcours vers le développement de logiciels pour d'autres personnes</a>.</p>
+<h2 id="machines-with-different-jobs"><span id="cost-4"></span><span id="usage-4"></span><span id="ubiquiti-aps"></span><span id="cost-3"></span><span id="specs-3"></span><span id="usage-3"></span><span id="qnap"></span><span id="cost-2"></span><span id="specs-2"></span><span id="usage-2"></span><span id="the-mandatory-window-server"></span><span id="cost-1"></span><span id="specs-1"></span><span id="usage-1"></span><span id="proxmox-lab-recreational"></span><span id="cost"></span><span id="specs"></span><span id="usage"></span><span id="proxmox-critical"></span>Des machines avec des rôles différents</h2>
+<p>Des années plus tard, mon labo ne se limitait plus à un serveur. La question était passée de « est-ce que je peux faire rouler ça? » à « qu'est-ce qui arrive au reste quand je brise quelque chose? ».</p>
+<p>En 2023, je séparais les tâches importantes des expériences. Un petit Qotom sans ventilateur, sous Proxmox, s'occupait du côté critique. Son processeur modeste était un avantage, pas une déception : je voulais une faible consommation et une meilleure autonomie sur batterie pendant une panne.</p>
+<p>Pour expérimenter, j'utilisais un Lenovo ThinkCentre reconditionné. Ce PC de bureau usagé ne coûtait pas cher et me donnait un endroit séparé pour jouer avec le développement web, les photos et Home Assistant. La virtualisation permettait de donner leur espace aux différents projets sans acheter un ordinateur pour chacun.</p>
+<p>J'avais aussi une machine Windows pour les logiciels qui en avaient besoin ou qui demandaient de la puissance dédiée, et un petit NAS QNAP pour le stockage. Comme le NAS n'était pas puissant, j'essayais de lui donner une tâche simple : les fichiers, la synchronisation avec Syncthing et des sauvegardes ailleurs pour les données importantes. Un NAS est pratique; ce n'est pas un remplacement pour une sauvegarde.</p>
+<h2 id="the-network"><span id="adguard"></span><span id="unifi-controller"></span><span id="pfsense"></span>Le réseau entre les machines</h2>
+<p>Les logiciels autour de ces machines faisaient partie du plaisir. J'utilisais pfSense comme routeur et pare-feu, le contrôleur UniFi avec mes points d'accès, et AdGuard pour filtrer le DNS. J'avais aussi essayé OPNsense, mais pfSense répondait à mes besoins à ce moment-là. J'attendais avec impatience le passage au Wi-Fi 6, et je n'ai pas été déçu.</p>
+<p>Ça ne voulait pas dire que le réseau était terminé. Seulement que j'avais un arrangement fonctionnel et, inévitablement, d'autres idées à essayer.</p>
+<h2 id="photographs"><span id="photoprism"></span>Les photos que je n'arrivais pas tout à fait à laisser derrière</h2>
+<p>Quitter Google Photos était plus difficile que je l'aurais voulu. L'interface était bonne, le partage facile et les souvenirs automatiques agréables. Mais je réfléchissais à reprendre le contrôle de mes photos, surtout depuis que Google avait retiré la connexion à Drive qui me permettait de les sauvegarder sur mon NAS.</p>
+<p>En 2023, j'ai exporté la bibliothèque avec Google Takeout, déposé le tout sur le NAS et dirigé PhotoPrism vers une copie en lecture seule. J'ai mis en place une sauvegarde hors site avant d'envisager de supprimer quoi que ce soit de Google Photos. La première sauvegarde a pris quelque chose comme une semaine ou deux. Quand elle s'est terminée, j'étais passé à d'autres projets — et la reconnaissance des visages de PhotoPrism ne me satisfaisait pas tout à fait pour ma bibliothèque. Le projet de retirer mes vieilles photos de Google n'avait pas abouti.</p>
+<p>L'exportation m'a aussi montré un autre problème : j'avais <em>tellement</em> de photos presque identiques. Clic, clic, clic, juste pour être certain d'en avoir une bonne. Ensuite, je les gardais toutes et je payais pour du stockage plutôt que de choisir. C'est une dette qui ne ressemble pas à une dette, jusqu'à ce qu'on en voie des années au même endroit.</p>
+<p>Ça m'a fait réfléchir à la facilité d'accumuler sans passer beaucoup de temps avec ce qu'on accumule. Vous vous souvenez de découvrir un groupe sur un CD, ou un jeu chez un ami? Je me demande encore ce qui change quand la prochaine chanson, photo ou partie est toujours à un clic.</p>
+<h2 id="home-assistant"><span id="what-i-look-forward-to-trying"></span><span id="tuya"></span><span id="what-i-dislike"></span><span id="localtuya"></span><span id="what-i-can-live-with"></span><span id="aqara-any-xiaomi-devices"></span><span id="zigbee-zigbee2mqtt"></span><span id="adaptive-lighting"></span><span id="my-favorite-automations-and-features"></span><span id="what-i-particularly-like"></span><span id="the-integrations-smart-devices-services"></span><span id="main-hub"></span><span id="clients"></span><span id="server"></span><span id="the-hardware"></span><span id="my-setup"></span>Une maison qui fait quelques petites choses toute seule</h2>
+<p>Home Assistant était une autre expérience qui prenait de l'ampleur. Les Raspberry Pi étaient chers et difficiles à trouver localement, et je ne savais pas de quelle puissance j'aurais éventuellement besoin. J'ai choisi un PC reconditionné, installé Proxmox et fait fonctionner Home Assistant dans une machine virtuelle. L'ordinateur pouvait servir à plus d'une chose, ce qui me rendait heureux.</p>
+<p>Au début, c'était intimidant : appareils, intégrations, protocoles, automatisations et YAML, auquel je n'étais pas encore habitué. Puis j'ai découvert que j'aimais modifier mes automatisations dans VS Code. Il y avait aussi une interface graphique, mais à l'époque, j'étais résolument dans l'équipe YAML.</p>
+<p>Mon intégration préférée était Adaptive Lighting. Les lumières pouvaient ajuster leur intensité et leur température de couleur au fil de la journée. Je n'avais plus à me demander constamment si une pièce était trop éclairée ou si la lumière était trop chaude. Un bouton pour ouvrir et fermer les stores me donnait l'impression de vivre dans le futur. De petites choses, mais j'aimais ça.</p>
+<p>Tout n'était pas une réussite. J'avais acheté des ampoules et des prises Wi-Fi qui dépendaient de Tuya. Les déconnexions, les délais et les communications avec le nuage étaient frustrants, surtout après y avoir dépensé de l'argent. J'ai essayé localtuya avec certains appareils et je me suis graduellement tourné vers Zigbee. J'aimais pouvoir mélanger des appareils de plusieurs fabricants. Quand j'en ai trouvé un sans convertisseur, j'en ai créé un et ouvert une demande d'intégration pour que d'autres puissent en profiter.</p>
+<p>Il restait toujours une idée sur la liste : mieux comprendre la consommation d'énergie, trouver des automatisations utiles avec la température et l'humidité, recevoir des rappels pour les plantes. Ça fait partie de l'attrait. C'est aussi comme ça que « juste une autre automatisation » prend tout un après-midi.</p>
+<h2 id="cameras"><span id="blue-iris"></span><span id="our-setup"></span><span id="security-first"></span>Caméras, performance et un peu de prudence</h2>
+<p>J'utilisais Blue Iris pour enregistrer les caméras. J'avais remarqué que laisser une vue de groupe ouverte pouvait consommer une quantité surprenante de processeur. Réduire la fréquence d'images par défaut du groupe faisait une différence notable chez moi. Le coût d'un système, ce n'est pas seulement le matériel dans un coin : c'est aussi ce qu'on lui demande de faire toute la journée.</p>
+<p>J'organisais les enregistrements en groupes avec leurs propres règles de conservation. J'avais aussi réfléchi aux façons de limiter l'exposition des caméras plutôt que d'ouvrir simplement l'enregistreur sur Internet. Ces choix dépendent du réseau et des versions logicielles; mes vieilles notes ne sont pas une recette de sécurité prête à appliquer.</p>
+<h2 id="why-keep-a-lab"><span id="next"></span>Pourquoi garder un labo?</h2>
+<p>J'aime avoir davantage le contrôle de mes données, mais ce n'est qu'une partie de l'histoire. J'aime essayer, comprendre pourquoi ça fonctionne, briser des choses et finir par les réparer. Parfois, ça donne un service utile. Parfois, une nouvelle appréciation du travail que faisait à ma place un service pratique.</p>
+<p>Et parfois, une soirée entière perdue à cause d'un caractère manquant. Ça en vaut quand même la peine. Habituellement.</p></div>]]></content>
+        <published>2026-11-17T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Home lab: software]]></title>
+        <id>https://garden.k11e.com/Home-Lab/3.Software/</id>
+        <link href="https://k11e.com/writing/home-lab-software/"/>
+        <updated>2026-11-03T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<div lang="en"><p>This article is now part of <a href="https://k11e.com/writing/home-lab-introduction/#the-network">my home lab story</a>.</p></div>]]></content>
+        <published>2023-02-05T00:00:00.000Z</published>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Welcome / Bonjour]]></title>
+        <id>https://garden.k11e.com/README/</id>
+        <link href="https://k11e.com/writing/garden-welcome/"/>
+        <updated>2026-11-03T00:00:00.000Z</updated>
+        <content type="html"><![CDATA[<div lang="en"><p><img src="https://img.shields.io/github/last-commit/orditeck/2ndbrain?color=fb3baa&#x26;label=Last%20%F0%9F%A7%A0%20update" alt="GitHub last commit" loading="lazy" decoding="async"> <a href="https://app.netlify.com/sites/dreamy-smakager-6be3b9/deploys"><img src="https://api.netlify.com/api/v1/badges/af0911c1-2523-42a9-b822-dcbdef700484/deploy-status" alt="Netlify Status" loading="lazy" decoding="async"></a></p>
+<p>Hey there! 👋 Bonjour!</p>
+<p>I'm Keven, aka <em>orditeck</em> online, and this is my second brain / digital garden.</p>
+<p>What's that, you might ask?</p>
+<p>It's simply a fancy term to design a place for notes to live, evolve and grow. I have two second brains (🤔), one private and one public. You're currently on my private one. Just kidding.</p>
+<p><img src="https://k11e.com/garden-assets/ff0152a0-08ad-4d78-a118-a6a7660bfd16-small.jpg" alt="Digital illustration of a human profile filled with stars, with colorful, plant-like tendrils growing from the head" width="480" height="480" loading="lazy" decoding="async"></p>
+<p>This space serves as a collection of my thoughts, ideas, and musings. I hope that as you explore this garden, you'll find something of interest and maybe even some inspiration. Thank you for taking the time to visit. Let's cultivate knowledge and creativity one thought at a time.</p>
+<p>I'm bilingual French/English and since this is my second brain, it's also bilingual. Expect to find parts in English and parts in French. I'll do my best to not mix both in one page 😅.</p></div>]]></content>
+        <published>2023-02-01T00:00:00.000Z</published>
+    </entry>
+</feed>
